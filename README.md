@@ -1,5 +1,5 @@
 # Circles
 
-will be updated:
+Save Together, Secure Savings On-Chain!
 
 
