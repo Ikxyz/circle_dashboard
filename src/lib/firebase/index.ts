@@ -1,7 +1,6 @@
 import { cert } from 'firebase-admin/app'
 import admin from "firebase-admin"
-import 'firebase/firestore'
-import 'firebase/storage'
+
 
 
 
