@@ -64,6 +64,7 @@ export default function DepositFunds({ circleId }: DepositProps) {
                await switchChain(TEST_CHAIN_ID);
           }
           const amountToDeposit = ethers.utils.parseEther(amount);
+          var data = await contract.ERC20.Allowance(`{{${CONTRACT_ADDRESS}}}`);
 
           // await mutateAsync({
           //      args: [3],
@@ -84,7 +85,7 @@ export default function DepositFunds({ circleId }: DepositProps) {
           if (!amount || !address) return;
 
           await onDeposit(amount);
-          await saveToAPi({ circleId, wallet: address as string, amount: Number(amount) ?? 0 });
+          // await saveToAPi({ circleId, wallet: address as string, amount: Number(amount) ?? 0 });
           // const deposit = await depositToCircle()
      }
 
