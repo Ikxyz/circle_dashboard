@@ -64,7 +64,24 @@ export default function DepositFunds({ circleId }: DepositProps) {
                await switchChain(TEST_CHAIN_ID);
           }
           const amountToDeposit = ethers.utils.parseEther(amount);
-          // var data = await contract.ERC20.Allowance(`{{${CONTRACT_ADDRESS}}}`);
+          if (!contract || !signer) {
+               return;
+          }
+          const owner = `{{${address}}}`;
+          // const res = await contract.erc20.allowanceOf(owner, CONTRACT_ADDRESS);
+          // console.log({ res })
+          const tx = await contract.call("depositUSDC", [amountToDeposit, 3], {  // 3 represents LockPeriod.Monthly
+               value: amountToDeposit,   // This sends the ETH value with the transaction
+               from: address  // Use the connected wallet's address
+          });
+
+          await tx.wait();
+
+          console.log({ tx })
+          console.log("Deposit successful:", tx);
+          // allowance(CONTRACT_ADDRESS);
+
+          // var data = await contract..Allowance(`{{${CONTRACT_ADDRESS}}}`);
 
           // await mutateAsync({
           //      args: [3],

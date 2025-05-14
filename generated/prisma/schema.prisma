@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  address   String   @unique
+  name      String?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relationships
+  memberships    CircleMember[]
+  createdCircles Circle[]       @relation("CircleCreator")
+  deposits       Deposit[]
+}
+
+model Circle {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  image       String?
+  balance     Float    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  creatorId   String
+
+  // Relationships
+  creator  User           @relation("CircleCreator", fields: [creatorId], references: [id])
+  members  CircleMember[]
+  deposits Deposit[]
+}
+
+model CircleMember {
+  id         String   @id @default(uuid())
+  userId     String
+  circleId   String
+  joinedAt   DateTime @default(now())
+  totalSaved Float    @default(0)
+
+  // Relationships
+  user     User      @relation(fields: [userId], references: [id])
+  circle   Circle    @relation(fields: [circleId], references: [id])
+  deposits Deposit[]
+
+  @@unique([userId, circleId])
+}
+
+model Deposit {
+  id          String   @id @default(uuid())
+  amount      Float
+  userId      String
+  circleId    String
+  memberId    String
+  depositDate DateTime @default(now())
+
+  // Relationships
+  user   User         @relation(fields: [userId], references: [id])
+  circle Circle       @relation(fields: [circleId], references: [id])
+  member CircleMember @relation(fields: [memberId], references: [id])
+}

@@ -1,150 +1,275 @@
-import { LOGO_URL } from "@/app/config";
-import { _fDb, CollectionNames, fDb } from "./firebase";
-import { Network } from "./network";
-import Utils from "./util";
-import Encrypt from "./encrypt";
+import { LOGO_URL } from '@/app/config'
+import { prisma } from './prisma'
+import Utils from './util'
 
-
-export type CircleCategory = "Country" | "City" | "State" | "Region" | "Continent" | "Custom" | "User";
+export type CircleCategory = 'Country' | 'City' | 'State' | 'Region' | 'Continent' | 'Custom' | 'User'
 
 export type Circle = {
-
-     id: string;
-     name: string;
-     noOfParticipants: number;
-     totalSaved: number;
-     description: string;
-
-     category: CircleCategory;
-
-     image: string;
-
-     createdAt: number;
-     updatedAt: number;
-
-     creator: string;
-
-     isPrivate: boolean;
+  id: string
+  name: string
+  noOfParticipants?: number
+  totalSaved?: number
+  description: string
+  category?: CircleCategory
+  image: string
+  createdAt: number | Date
+  updatedAt: number | Date
+  creator: string
+  isPrivate?: boolean
 }
 
-export const Circle = async (arg: { name: string, isPrivate?: false, category?: string, image?: string, noOfParticipants?: number, creator?: string, totalSaved?: number, description: string, createdAt?: number, updatedAt?: number }) => {
-     return {
-          id: Utils.cleanString(arg.name),
-          name: arg.name,
-          noOfParticipants: arg?.noOfParticipants ?? 0,
-          isPrivate: arg.isPrivate ?? false,
-          totalSaved: arg.totalSaved ?? 0,
-          description: arg.description,
-          creator: arg.creator ?? "system",
-          category: arg.category ?? "Custom",
-          image: arg.image ?? LOGO_URL,
-          createdAt: arg.createdAt ?? Date.now(),
-          updatedAt: arg.updatedAt ?? Date.now(),
-     }
+export const Circle = async (arg: {
+  name: string
+  isPrivate?: false
+  category?: string
+  image?: string
+  noOfParticipants?: number
+  creator?: string
+  totalSaved?: number
+  description: string
+  createdAt?: number
+  updatedAt?: number
+}) => {
+  return {
+    id: Utils.cleanString(arg.name),
+    name: arg.name,
+    noOfParticipants: arg?.noOfParticipants ?? 0,
+    isPrivate: arg.isPrivate ?? false,
+    totalSaved: arg.totalSaved ?? 0,
+    description: arg.description,
+    creator: arg.creator ?? 'system',
+    category: arg.category ?? 'Custom',
+    image: arg.image ?? LOGO_URL,
+    createdAt: arg.createdAt ?? Date.now(),
+    updatedAt: arg.updatedAt ?? Date.now(),
+  }
 }
-
 
 async function createCircle(arg: Circle) {
-     const exist = await getCircle(arg.id);
-     if (exist) return exist;
-     await fDb.collection(CollectionNames.circles).doc(arg.id).set(arg);
+  const exist = await getCircle(arg.id)
+  if (exist) return exist
+
+  return await prisma.circle.create({
+    data: {
+      id: arg.id,
+      name: arg.name,
+      description: arg.description,
+      image: arg.image,
+      createdAt: new Date(arg.createdAt as number),
+      updatedAt: new Date(arg.updatedAt as number),
+      creatorId: arg.creator,
+    },
+  })
 }
 
 export async function getAllCircles(page = 1, limit = 10): Promise<Circle[]> {
-     const results = await fDb.collection(CollectionNames.circles).limit(limit).offset((page - 1) * limit).get();
-     return results.docs.map((doc: any) => {
-          return doc.data() as any;
-     });
+  const circles = await prisma.circle.findMany({
+    take: limit,
+    skip: (page - 1) * limit,
+    include: {
+      members: true,
+    },
+  })
+
+  return circles.map((circle: any) => ({
+    id: circle.id,
+    name: circle.name,
+    description: circle.description || '',
+    image: circle.image || LOGO_URL,
+    createdAt: circle.createdAt,
+    updatedAt: circle.updatedAt,
+    noOfParticipants: circle.members.length,
+    totalSaved: circle.balance,
+    creator: circle.creatorId,
+    category: 'Custom' as CircleCategory,
+  }))
 }
 
-export async function getCircle(arg: string): Promise<Circle> {
-     const id = Utils.cleanString(arg);
-     const doc = await fDb.collection(CollectionNames.circles).doc(id).get();
-     return (doc.data() as any)
+export async function getCircle(arg: string): Promise<Circle | null> {
+  const id = Utils.cleanString(arg)
+  const circle = await prisma.circle.findUnique({
+    where: { id },
+    include: {
+      members: true,
+    },
+  })
+
+  if (!circle) return null
+
+  return {
+    id: circle.id,
+    name: circle.name,
+    description: circle.description || '',
+    image: circle.image || LOGO_URL,
+    createdAt: circle.createdAt,
+    updatedAt: circle.updatedAt,
+    noOfParticipants: circle.members.length,
+    totalSaved: circle.balance,
+    creator: circle.creatorId,
+    category: 'Custom' as CircleCategory,
+  }
 }
-
-
 
 export async function joinCircle(circleId: string, userId: string) {
-     const id = Utils.cleanString(circleId + userId);
-     const doc = await fDb.collection(CollectionNames.network).doc(id).set({
-          uid: userId,
-          circle: circleId,
-          totalSaved: 0,
-          createdAt: Date.now()
-     });
+  await prisma.circleMember.create({
+    data: {
+      userId,
+      circleId,
+      joinedAt: new Date(),
+      totalSaved: 0,
+    },
+  })
 }
 
-export async function getIsUserInCircle(circleId: string, userId: string): Promise<Network | null> {
-     const id = Utils.cleanString(circleId);
-     const doc = await fDb.collection(CollectionNames.network).where("uid", "==", userId).where("circle", "==", id).get();
-     if (doc.docs.length == 0) return null;
-     return doc.docs[0].data() as Network;
+export async function getIsUserInCircle(circleId: string, userId: string) {
+  const member = await prisma.circleMember.findUnique({
+    where: {
+      userId_circleId: {
+        userId,
+        circleId,
+      },
+    },
+  })
+
+  return member
 }
 
 export async function getUserCircles(wallerId: string, page = 1, limit = 10): Promise<Circle[]> {
-     const results = await fDb.collection(CollectionNames.network).where("uid", "==", wallerId).limit(limit).offset((page - 1) * limit).get();
-     return results.docs.map((doc: any) => {
-          return doc.data() as any;
-     });
-}
+  const memberships = await prisma.circleMember.findMany({
+    where: {
+      userId: wallerId,
+    },
+    include: {
+      circle: {
+        include: {
+          members: true,
+        },
+      },
+    },
+    take: limit,
+    skip: (page - 1) * limit,
+  })
 
+  return memberships.map((membership: any) => ({
+    id: membership.circle.id,
+    name: membership.circle.name,
+    description: membership.circle.description || '',
+    image: membership.circle.image || LOGO_URL,
+    createdAt: membership.circle.createdAt,
+    updatedAt: membership.circle.updatedAt,
+    noOfParticipants: membership.circle.members.length,
+    totalSaved: membership.circle.balance,
+    creator: membership.circle.creatorId,
+    category: 'Custom' as CircleCategory,
+  }))
+}
 
 export async function getTreadingCircles(): Promise<Array<Circle>> {
-     // const ids = [
-     //      "Anyone can save 🔥",
-     //      "Nigerians can save 🇳🇬",
-     //      " Ghana 🇬🇭",
-     //      "Based Savers",
-     //      "United Kingdom",
-     //      "Freelancers",
-     //      "Entrepreneurs",
-     //      "Developers Circle"]
-     // const results: Circle[] = [];
-     // for (const id of ids) {
-     //      const circle = await getCircle(id)
-     //      if (!circle) {
-     //           const e = { name: id, description: `Join ${id} national leaderboard`, image: LOGO_URL }
-     //           await createCircle(circle)
-     //      };
-     //      results.push(circle);
-     // }
-     // return results;
-     return [];
+  // Get most active circles based on number of deposits
+  const circles = await prisma.circle.findMany({
+    include: {
+      members: true,
+      deposits: {
+        orderBy: {
+          depositDate: 'desc',
+        },
+        take: 10,
+      },
+    },
+    orderBy: {
+      balance: 'desc',
+    },
+    take: 8,
+  })
+
+  return circles.map((circle: any) => ({
+    id: circle.id,
+    name: circle.name,
+    description: circle.description || '',
+    image: circle.image || LOGO_URL,
+    createdAt: circle.createdAt,
+    updatedAt: circle.updatedAt,
+    noOfParticipants: circle.members.length,
+    totalSaved: circle.balance,
+    creator: circle.creatorId,
+    category: 'Custom' as CircleCategory,
+  }))
 }
 
+export async function depositToCircle(arg: { circleId: string; wallet: string; amount: number }) {
+  const { amount: amt, circleId, wallet } = arg
+  const amount = Number(amt)
 
-export async function depositToCircle(arg: { circleId: string, wallet: string, amount: number }) {
-     const { amount: amt, circleId, wallet } = arg;
-     const amount = Number(amt);
-     const payload = {
-          id: Encrypt.hash(wallet + circleId + Date.now(), 'md5'),
-          amount: amount,
-          type: "deposit",
-          wallet: wallet,
-          circle: circleId,
-          createdAt: Date.now(),
-     }
-     const networkId = Utils.cleanString(circleId + wallet);
-     const batch = fDb.batch();
-     // update network
-     batch.set(fDb.collection(CollectionNames.network).doc(networkId), {
-          uid: Utils.cleanString(circleId + wallet),
-          circle: circleId,
-          createdAt: Date.now(),
-          totalSaved: _fDb.FieldValue.increment(amount)
-     }, { merge: true });
+  // Get user by wallet address
+  const user = await prisma.user.findUnique({
+    where: { address: wallet },
+  })
 
-     // update circle
-     batch.update(fDb.collection(CollectionNames.circles).doc(circleId), { noOfParticipants: _fDb.FieldValue.increment(1), totalSaved: _fDb.FieldValue.increment(amount) });
+  if (!user) {
+    throw new Error('User not found')
+  }
 
-     // create record
-     batch.set(fDb.collection(CollectionNames.transactions).doc(payload.id), payload);
+  // Get circle member or create if doesn't exist
+  let member = await prisma.circleMember.findUnique({
+    where: {
+      userId_circleId: {
+        userId: user.id,
+        circleId,
+      },
+    },
+  })
 
-     await batch.commit();
+  if (!member) {
+    member = await prisma.circleMember.create({
+      data: {
+        userId: user.id,
+        circleId,
+        totalSaved: 0,
+      },
+    })
+  }
+
+  // Update in a transaction
+  await prisma.$transaction([
+    // Update member's total saved
+    prisma.circleMember.update({
+      where: { id: member.id },
+      data: {
+        totalSaved: { increment: amount },
+      },
+    }),
+
+    // Update circle balance
+    prisma.circle.update({
+      where: { id: circleId },
+      data: {
+        balance: { increment: amount },
+      },
+    }),
+
+    // Create deposit record
+    prisma.deposit.create({
+      data: {
+        amount,
+        userId: user.id,
+        circleId,
+        memberId: member.id,
+      },
+    }),
+  ])
 }
-
 
 export async function getLeaderBoard(circleId: string) {
-     await fDb.collection(CollectionNames.network).where("circle", "==", circleId).get();
+  return await prisma.circleMember.findMany({
+    where: {
+      circleId,
+    },
+    orderBy: {
+      totalSaved: 'desc',
+    },
+    include: {
+      user: true,
+    },
+    take: 10,
+  })
 }
