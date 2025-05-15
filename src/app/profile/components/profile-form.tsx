@@ -5,9 +5,12 @@ import { Heading, Subheading } from '@/components/heading';
 import { Input } from '@/components/input';
 import { Text } from '@/components/text';
 import { createAccount, getAccount, Profile, updateAccount } from '@/lib/account';
-import { useAddress } from "@thirdweb-dev/react";
 import React, { useEffect, useState } from 'react';
 import CreateAccount from './create-account';
+import { useActiveAccount, useWalletBalance } from 'thirdweb/react';
+import { thirdWebClient } from '@/providers/walletProvider';
+import { Chain } from 'thirdweb';
+import { BaseSepoliaTestnet } from '@thirdweb-dev/chains';
 // const connedWallet = useConnectedWallet();
 
 
@@ -15,18 +18,16 @@ import CreateAccount from './create-account';
 export default function ProfileForm() {
 
 
-     const address = useAddress();
+     const account = useActiveAccount();
+     const { data: balance, isLoading } = useWalletBalance({
+          client: thirdWebClient,
+          chain: BaseSepoliaTestnet as any,
+          address: account?.address,
+     });
 
      const [state, setState] = useState<Partial<Profile>>({})
-     const [isLoading, setIsLoading] = useState(false);
+     const [isSettingUpAccount, setIsSettingUpAccount] = useState(false);
 
-
-     useEffect(() => {
-          if (!address) {
-               return;
-          }
-          getProfile(address);
-     }, [address]);
 
      const getProfile = async (wallet: string) => {
           const acc = await getAccount(wallet);
@@ -50,19 +51,19 @@ export default function ProfileForm() {
           const twitter = data.get('twitter') as string;
           const discord = data.get('discord') as string;
 
-          if (!address) return;
-          setIsLoading(true);
+          if (!account?.address) return;
+          setIsSettingUpAccount(true);
           try {
-               const update = await updateAccount(address, { name, twitter, discord });
+               const update = await updateAccount(account.address, { name, twitter, discord });
                setState(update);
           } catch (err) {
                console.log(err)
           }
-          setIsLoading(false);
+          setIsSettingUpAccount(false);
      }
 
 
-     if (!address) return <CreateAccount />
+     if (!account?.address) return <CreateAccount />
 
      return (
           <form onSubmit={onSubmit} className="mx-auto max-w-4xl">

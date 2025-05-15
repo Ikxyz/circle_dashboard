@@ -11,3 +11,4 @@ export {
   useUserCircles as useUserCirclesFromApi,
   type Circle,
 } from './useCircle'
+export { useQueryClient } from './useQueryClient'
