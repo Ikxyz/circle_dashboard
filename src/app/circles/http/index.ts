@@ -1,7 +1,6 @@
 'use client'
 
-import { useCircle, useCircles, useLeaderboard, useMutations } from '@/hooks'
-import { QueryClient } from '@tanstack/react-query'
+import { useCircle, useCircles, useLeaderboard, useMutations, useQueryClient } from '@/hooks'
 
 // Get circles with pagination
 export const useCirclesPage = (page = 1, limit = 10) => {
@@ -33,7 +32,7 @@ export const useCircleDetails = (id?: string) => {
 
 // React hook to get circle mutations
 export const useCircleMutations = () => {
-  const queryClient = new QueryClient()
+  const queryClient = useQueryClient()
   const mutations = useMutations(queryClient)
 
   return {
