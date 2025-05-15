@@ -1,51 +1,47 @@
 'use client';
 
 import { CONTRACT_ADDRESS, TEST_CHAIN_ID } from '@/app/config';
-import { ChainId, toWei, useAddress, useChain, useContract, useContractWrite, useSigner, useSwitchChain, useTokenBalance } from '@thirdweb-dev/react';
+import { useWalletBalance, useActiveAccount, useSendTransaction } from 'thirdweb/react';
+import { prepareTransaction, toWei } from 'thirdweb';
 import { ethers } from 'ethers';
 import { ChangeEvent, useState } from 'react';
 import { Button } from './button';
 import Drawer from './drawer';
 import { Input } from './input';
 import { allowance } from "thirdweb/extensions/erc20";
-
-
-
+import { thirdWebClient } from '@/providers/walletProvider';
+import { BaseSepoliaTestnet } from '@thirdweb-dev/chains';
 
 type DepositProps = {
      circleId: string
-     currency: "ETH" | "USDT" | "USDC",
-     min: number;
+     currency?: "ETH" | "USDT" | "USDC",
+     min?: number;
 }
 
-
 export default function DepositFunds({ circleId }: DepositProps) {
-     const [amountInETH, setAmountInETH] = useState();
+     const [amountInETH, setAmountInETH] = useState<string>("");
      const [isDepositOpen, setIsDepositOpen] = useState(false);
-     const chain = useChain();
-     const signer = useSigner();
-     const switchChain = useSwitchChain();
-     const address = useAddress();
+     const [error, setError] = useState<string | null>(null);
+     const [isLoading, setIsLoading] = useState(false);
+     const account = useActiveAccount();
 
-     const { contract, isLoading, error } = useContract(CONTRACT_ADDRESS);
+     const balance = useWalletBalance({
+          client: thirdWebClient,
+          chain: BaseSepoliaTestnet as any,
+          address: account?.address,
+     });
 
-     const { mutateAsync, isLoading: writeLoading, error: writeError } = useContractWrite(
-          contract,
-          "depositETH",
-     );
-
-     // const { usdcContract } = useContract("0x036CbD53842c5426634e7929541eC2318f3dCF7e");
-     // const { usdcBalance, isLoading: isLoadingBalance, error: errorBalance } = useTokenBalance(
-     //      usdcContract,
-     //      address,
-     // );
+     const { mutateAsync: sendTx, data: transactionResult } =
+          useSendTransaction();
 
      const openDeposit = () => {
           setIsDepositOpen(true);
+          setError(null);
      }
 
      const onClose = () => {
           setIsDepositOpen(false);
+          setError(null);
      }
 
      const getUsdtPayable = (amount: string) => {
@@ -58,55 +54,71 @@ export default function DepositFunds({ circleId }: DepositProps) {
           // const userBalance = await contract?.balanceOf(signer.getAddress());
           // console.log({ userBalance })
      }
+
      const onDeposit = async (amount: string) => {
-          confirmBalance()
-          if (!chain || chain.chainId !== TEST_CHAIN_ID || !chain.testnet) {
-               await switchChain(TEST_CHAIN_ID);
+          try {
+               setIsLoading(true);
+               confirmBalance();
+
+               const amountToDeposit = ethers.utils.parseEther(amount);
+
+               const transaction = prepareTransaction({
+                    to: "0x...", // Replace with actual contract address
+                    value: toWei(amount), // Use the actual amount instead of hardcoded value
+                    chain: BaseSepoliaTestnet as any,
+                    client: thirdWebClient,
+               });
+
+               const tx = await sendTx(transaction);
+               console.log("Deposit successful:", tx);
+
+               setIsDepositOpen(false);
+               return true;
+          } catch (err) {
+               console.error("Transaction failed:", err);
+               setError("Transaction failed. Please try again.");
+               return false;
+          } finally {
+               setIsLoading(false);
           }
-          const amountToDeposit = ethers.utils.parseEther(amount);
-          if (!contract || !signer) {
-               return;
-          }
-          const owner = `{{${address}}}`;
-          // const res = await contract.erc20.allowanceOf(owner, CONTRACT_ADDRESS);
-          // console.log({ res })
-          const tx = await contract.call("depositUSDC", [amountToDeposit, 3], {  // 3 represents LockPeriod.Monthly
-               value: amountToDeposit,   // This sends the ETH value with the transaction
-               from: address  // Use the connected wallet's address
-          });
-
-          await tx.wait();
-
-          console.log({ tx })
-          console.log("Deposit successful:", tx);
-          // allowance(CONTRACT_ADDRESS);
-
-          // var data = await contract..Allowance(`{{${CONTRACT_ADDRESS}}}`);
-
-          // await mutateAsync({
-          //      args: [3],
-          // })
-
-          return true;
-
      }
 
      const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
           e.preventDefault();
+          setError(null);
 
-          const data = new FormData(e.target as any);
-          console.log(data);
+          const data = new FormData(e.target as HTMLFormElement);
           const amount = data.get('amountInETH') as string;
-          console.log({ amount });
 
-          if (!amount || !address) return;
+          if (!amount || !account) {
+               setError("Please enter an amount and connect your wallet");
+               return;
+          }
 
-          await onDeposit(amount);
-          // await saveToAPi({ circleId, wallet: address as string, amount: Number(amount) ?? 0 });
-          // const deposit = await depositToCircle()
+          // Convert string to numbers for proper comparison
+          const amountValue = parseFloat(amount);
+          const balanceValue = balance.data?.value ? parseFloat(ethers.utils.formatEther(balance.data.value)) : 0;
+
+          if (amountValue <= 0) {
+               setError("Please enter a valid amount greater than 0");
+               return;
+          }
+
+          if (amountValue > balanceValue) {
+               setError("Insufficient balance in your wallet");
+               return;
+          }
+
+          const success = await onDeposit(amount);
+          if (success) {
+               // Consider saving to API only if deposit was successful
+               await saveToAPi({
+                    circleId,
+                    wallet: account.address,
+                    amount: amountValue
+               });
+          }
      }
-
-
 
      const saveToAPi = async (body: any) => {
           try {
@@ -116,37 +128,55 @@ export default function DepositFunds({ circleId }: DepositProps) {
                     headers: {
                          'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(body), // Send data to the API
+                    body: JSON.stringify(body),
                });
 
                const data = await res.json();
-               console.log(data.message);  // Display the server response
+               console.log(data.message);
           } catch (error) {
-               console.error('Error:', error);
+               console.error('Error saving to API:', error);
           }
      }
 
      return (
           <div>
-               <Button onClick={openDeposit} >Deposit to start saving</Button>
+               <Button onClick={openDeposit}>Deposit to start saving</Button>
 
                <Drawer title='Deposit' isOpen={isDepositOpen} onClose={onClose}>
                     <form onSubmit={onSubmit}>
+                         <h3>How much do you want to save</h3>
 
-                         <h3>How mush do you want to save</h3>
+                         <div className="mt-2 mb-4">
+                              <p className="text-sm text-gray-500">
+                                   Your balance: {balance.data?.value
+                                        ? `${parseFloat(ethers.utils.formatEther(balance.data.value)).toFixed(4)} ETH`
+                                        : "Loading..."}
+                              </p>
+                         </div>
 
                          <br />
 
-                         <Input name='amountInETH' type='number' aria-required required />
+                         <Input
+                              name='amountInETH'
+                              type='number'
+                              aria-required
+                              required
+                              step="0.001"
+                              min="0"
+                              placeholder="Enter amount in ETH"
+                         />
+
+                         {error && (
+                              <p className="text-red-500 text-sm mt-2">{error}</p>
+                         )}
+
                          <br />
-                         <Button isLoading={isLoading || writeLoading} type='submit'>
+
+                         <Button isLoading={isLoading} type='submit'>
                               Proceed
                          </Button>
-
                     </form>
-
                </Drawer>
-
           </div>
      )
 }
