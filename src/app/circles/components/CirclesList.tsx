@@ -1,15 +1,13 @@
 'use client'
 
-import { useCirclesPage, getCirclesMutations } from '../http'
-import { useQueryClient } from '@/hooks'
+import { useCirclesPage, useCircleMutations } from '../http'
 import { useState } from 'react'
 import Link from 'next/link'
 
 export default function CirclesList() {
      const [page, setPage] = useState(1)
      const { circles, isLoading, isError } = useCirclesPage(page)
-     const queryClient = useQueryClient()
-     const { joinCircle } = getCirclesMutations(queryClient)
+     const { joinCircle } = useCircleMutations()
 
      const handleJoinCircle = async (circleId: string, userId: string) => {
           try {

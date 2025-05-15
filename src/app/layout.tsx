@@ -5,6 +5,7 @@ import type React from 'react'
 import { ApplicationLayout } from './application-layout'
 import { getEvents } from './data'
 import WalletProvider from '@/providers/walletProvider'
+import Providers from './providers'
 
 // export const metadata: Metadata = {
 //   title: {
@@ -26,7 +27,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </head>
       <body>
-        <ApplicationLayout  >{children}</ApplicationLayout>
+        <Providers>
+          <ApplicationLayout>{children}</ApplicationLayout>
+        </Providers>
       </body>
     </html>
   )

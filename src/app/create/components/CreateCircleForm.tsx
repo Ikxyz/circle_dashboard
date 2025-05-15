@@ -1,19 +1,29 @@
 'use client'
 
-import { useCreatePage, getCreatePageMutations } from '../http'
-import { useQueryClient } from '@/hooks'
+import { useCreatePage, useCreatePageMutations } from '../http'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Button } from 'src/components/button'
+import { Divider } from 'src/components/divider'
+import { Heading, Subheading } from 'src/components/heading'
+import { Input } from 'src/components/input'
+import { Text } from 'src/components/text'
+import { Textarea } from 'src/components/textarea'
+import { Select } from 'src/components/select'
+import { Checkbox, CheckboxField } from 'src/components/checkbox'
+import { Label } from 'src/components/fieldset'
 
 export default function CreateCircleForm({ address }: { address: string }) {
      const router = useRouter()
      const { user, isLoadingUser } = useCreatePage(address)
-     const queryClient = useQueryClient()
-     const { createCircle } = getCreatePageMutations(queryClient)
+     const { createCircle } = useCreatePageMutations()
 
-     const [name, setName] = useState('')
+     const [name, setName] = useState('My Circle')
      const [description, setDescription] = useState('')
      const [image, setImage] = useState('')
+     const [isPublic, setIsPublic] = useState(true)
+     const [duration, setDuration] = useState('12')
+     const [minDeposit, setMinDeposit] = useState('1')
 
      const handleSubmit = async (e: React.FormEvent) => {
           e.preventDefault()
@@ -43,68 +53,114 @@ export default function CreateCircleForm({ address }: { address: string }) {
      }
 
      return (
-          <div className="max-w-2xl mx-auto p-6">
-               <h1 className="text-2xl font-bold mb-6">Create a New Circle</h1>
+          <form onSubmit={handleSubmit} className="mx-auto max-w-4xl">
+               <Heading>Create a circle</Heading>
+               <Divider className="my-10 mt-6" />
 
-               <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6">
-                    <div className="mb-4">
-                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                              Circle Name*
-                         </label>
-                         <input
-                              type="text"
+               <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                    <div className="space-y-1">
+                         <Subheading>Circle Name</Subheading>
+                         <Text>Can be named after anything, Family, Organization etc</Text>
+                    </div>
+                    <div>
+                         <Input
+                              aria-label="Circle Name"
+                              name="name"
                               value={name}
                               onChange={(e) => setName(e.target.value)}
                               required
-                              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-zinc-700"
-                              placeholder="Enter circle name"
                          />
                     </div>
+               </section>
 
-                    <div className="mb-4">
-                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                              Description
-                         </label>
-                         <textarea
+               <Divider className="my-10" soft />
+
+               <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                    <div className="space-y-1">
+                         <Subheading>Short Description</Subheading>
+                         <Text>This will be displayed on your circle public profile. Maximum 240 characters.</Text>
+                    </div>
+                    <div>
+                         <Textarea
+                              aria-label="Circle Description"
+                              name="description"
                               value={description}
                               onChange={(e) => setDescription(e.target.value)}
-                              rows={4}
-                              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-zinc-700"
-                              placeholder="Describe your circle (purpose, goals, etc.)"
                          />
                     </div>
+               </section>
 
-                    <div className="mb-6">
-                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                              Image URL
-                         </label>
-                         <input
-                              type="url"
-                              value={image}
-                              onChange={(e) => setImage(e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-zinc-700"
-                              placeholder="https://example.com/image.jpg"
+               <Divider className="my-10" soft />
+
+               <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                    <div className="space-y-1">
+                         <Subheading>Circle type</Subheading>
+                         <Text>Tick if you want your circle to be public</Text>
+                    </div>
+                    <div className="space-y-4">
+                         <CheckboxField>
+                              <Checkbox
+                                   name="is_public"
+                                   checked={isPublic}
+                                   onChange={() => setIsPublic(!isPublic)}
+                              />
+                              <Label>Circle can be joined by anyone</Label>
+                         </CheckboxField>
+                    </div>
+               </section>
+
+               <Divider className="my-10" soft />
+
+               <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                    <div className="space-y-1">
+                         <Subheading>Duration</Subheading>
+                         <Text>Duration of the circle</Text>
+                    </div>
+                    <div>
+                         <Select
+                              aria-label="Duration"
+                              name="duration"
+                              value={duration}
+                              onChange={(e) => setDuration(e.target.value)}
+                         >
+                              <option value="12">1 year</option>
+                              <option value="6">6 months</option>
+                              <option value="3">3 months</option>
+                         </Select>
+                    </div>
+               </section>
+
+               <Divider className="my-10" soft />
+
+               <section className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+                    <div className="space-y-1">
+                         <Subheading>Min Deposit (USDT)</Subheading>
+                         <Text>Min allowed to be deposited per member</Text>
+                    </div>
+                    <div>
+                         <Input
+                              aria-label="Min Deposit"
+                              name="min_deposit"
+                              type="number"
+                              min="0.01"
+                              step="0.01"
+                              value={minDeposit}
+                              onChange={(e) => setMinDeposit(e.target.value)}
+                              required
                          />
-                         <p className="text-xs text-gray-500 mt-1">Leave empty to use a default image</p>
                     </div>
+               </section>
 
-                    <div className="flex justify-end">
-                         <button
-                              type="button"
-                              onClick={() => router.back()}
-                              className="mr-4 bg-gray-200 dark:bg-zinc-700 hover:bg-gray-300 dark:hover:bg-zinc-600 py-2 px-4 rounded-md transition-colors"
-                         >
-                              Cancel
-                         </button>
-                         <button
-                              type="submit"
-                              className="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md transition-colors"
-                              disabled={createCircle.isPending || !name.trim()}
-                         >
-                              {createCircle.isPending ? 'Creating...' : 'Create Circle'}
-                         </button>
-                    </div>
-               </form>
-          </div>
+               <Divider className="my-10" soft />
+
+               <div className="flex justify-end gap-4">
+                    <Button
+                         type="submit"
+                         disabled={createCircle.isPending || !name.trim()}
+                    >
+                         {createCircle.isPending ? 'Creating...' : 'Create Circle'}
+                    </Button>
+               </div>
+          </form>
      )
 }

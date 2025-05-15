@@ -1,26 +1,18 @@
+'use client'
 
 import WalletProvider from '@/providers/walletProvider'
-import ProfileForm from './components/profile-form'
-
+import ProfileDetails from './components/ProfileDetails'
+import { useAccount } from '@/hooks'
 
 export default function ProfilePage() {
-
-  // const activeAccount = useActiveAccount();
-
-
-  const getProfile = async (wallet: string) => {
-    // const profile = await getAccount(activeAccount?.address);
-    // if (profile) {
-    //   setState({ name: profile.name, twitter: profile.twitter ?? '', discord: profile.discord ?? '', currency: profile.currency });
-    // }
-  }
-
+  // In a real app, you would get the wallet address from your wallet provider
+  // For this example, we'll hardcode a wallet address
+  const wallet = "example-wallet-address";
 
   return (
-
     <WalletProvider>
-      <ProfileForm   />
+      {/* Use the ProfileDetails component which uses React Query */}
+      <ProfileDetails wallet={wallet} />
     </WalletProvider>
-
   )
 }

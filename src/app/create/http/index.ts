@@ -1,6 +1,6 @@
 'use client'
 
-import { useCreateCircle, useFindOrCreateUser } from '@/hooks'
+import { useFindOrCreateUser, useMutations } from '@/hooks'
 import { QueryClient } from '@tanstack/react-query'
 
 // For the create circle page, we mainly need the mutations
@@ -16,9 +16,12 @@ export const useCreatePage = (address?: string) => {
   }
 }
 
-// Mutations that need the QueryClient
-export const getCreatePageMutations = (queryClient: QueryClient) => {
+// React hook to get create page mutations
+export const useCreatePageMutations = () => {
+  const queryClient = new QueryClient()
+  const mutations = useMutations(queryClient)
+
   return {
-    createCircle: useCreateCircle(queryClient),
+    createCircle: mutations.createCircle,
   }
 }

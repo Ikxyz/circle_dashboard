@@ -1,14 +1,12 @@
 'use client'
 
-import { useProfilePage, getProfileMutations } from '../http'
-import { useQueryClient } from '@/hooks'
+import { useProfilePage, useProfileMutations } from '../http'
 import { useState } from 'react'
 import Link from 'next/link'
 
 export default function ProfileDetails({ wallet }: { wallet: string }) {
      const { profile, userCircles, totalSavings, isLoadingProfile } = useProfilePage(wallet, 'user-id-here') // Replace with actual user ID
-     const queryClient = useQueryClient()
-     const { updateAccount } = getProfileMutations(queryClient)
+     const { updateAccount } = useProfileMutations()
 
      const [isEditing, setIsEditing] = useState(false)
      const [name, setName] = useState('')
@@ -142,7 +140,7 @@ export default function ProfileDetails({ wallet }: { wallet: string }) {
 
                     {userCircles.length === 0 ? (
                          <div className="text-center py-4">
-                              <p>You haven't joined any circles yet.</p>
+                              <p>You haven&apos;t joined any circles yet.</p>
                               <Link
                                    href="/circles"
                                    className="inline-block mt-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md transition-colors"

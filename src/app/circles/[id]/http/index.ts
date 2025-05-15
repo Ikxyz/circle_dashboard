@@ -1,6 +1,6 @@
 'use client'
 
-import { useCircle, useDepositToCircle, useFindOrCreateUser, useJoinCircle, useLeaderboard } from '@/hooks'
+import { useCircle, useFindOrCreateUser, useLeaderboard, useMutations } from '@/hooks'
 import { QueryClient } from '@tanstack/react-query'
 
 // Get circle details by ID
@@ -21,10 +21,13 @@ export const useCircleDetailsPage = (id?: string, address?: string) => {
   }
 }
 
-// Mutations that need the QueryClient
-export const getCircleDetailsMutations = (queryClient: QueryClient) => {
+// React hook to get circle details mutations
+export const useCircleDetailsMutations = () => {
+  const queryClient = new QueryClient()
+  const mutations = useMutations(queryClient)
+
   return {
-    joinCircle: useJoinCircle(queryClient),
-    depositToCircle: useDepositToCircle(queryClient),
+    joinCircle: mutations.joinCircle,
+    depositToCircle: mutations.depositToCircle,
   }
 }

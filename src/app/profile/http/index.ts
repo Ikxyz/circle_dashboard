@@ -1,6 +1,6 @@
 'use client'
 
-import { useAccount, useCreateAccount, useUpdateAccount, useUserCirclesFromApi, useUserTotalSavings } from '@/hooks'
+import { useAccount, useMutations, useUserCirclesFromApi, useUserTotalSavings } from '@/hooks'
 import { QueryClient } from '@tanstack/react-query'
 
 // Get user profile and associated data
@@ -21,10 +21,13 @@ export const useProfilePage = (wallet?: string, userId?: string) => {
   }
 }
 
-// Mutations that need the QueryClient
-export const getProfileMutations = (queryClient: QueryClient) => {
+// React hook to get profile mutations
+export const useProfileMutations = () => {
+  const queryClient = new QueryClient()
+  const mutations = useMutations(queryClient)
+
   return {
-    createAccount: useCreateAccount(queryClient),
-    updateAccount: useUpdateAccount(queryClient),
+    createAccount: mutations.createAccount,
+    updateAccount: mutations.updateAccount,
   }
 }

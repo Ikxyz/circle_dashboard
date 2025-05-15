@@ -1,3 +1,4 @@
+'use client'
 
 import { Avatar } from 'src/components/avatar'
 import { Badge } from '@components/badge'
@@ -6,16 +7,23 @@ import { Divider } from 'src/components/divider'
 import { Heading, Subheading } from 'src/components/heading'
 import { Select } from 'src/components/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from 'src/components/table'
-import { getRecentOrders } from 'src/app/data'
 import ConnectWallet from '@/components/connectWallet'
 import WalletProvider from '@/providers/walletProvider'
 import { Stat } from '@/components/stats'
+import { useHomePage } from './http'
 
+export default function HomePage() {
+  // For simplicity, using a hardcoded address here
+  // In a real app, you'd get this from your wallet provider
+  const address = "example-wallet-address";
+  const { trendingCircles, isLoadingTrendingCircles } = useHomePage(address);
 
-
-
-export default async function Home() {
-  let orders = await getRecentOrders()
+  // Mock data until we have real data from React Query
+  const orders = [
+    { id: 1, date: '2023-04-01', customer: { name: 'John Doe' }, amount: { usd: '$100' }, url: '#' },
+    { id: 2, date: '2023-04-02', customer: { name: 'Jane Smith' }, amount: { usd: '$150' }, url: '#' },
+    { id: 3, date: '2023-04-03', customer: { name: 'Bob Johnson' }, amount: { usd: '$200' }, url: '#' },
+  ];
 
   return (
     <>
@@ -50,33 +58,38 @@ export default async function Home() {
         <Stat title="Your Total Saved" value="$589" change="+21.2%" />
       </div>
       <Subheading className="mt-14">Highest Savers</Subheading>
-      <Table className="mt-4 [--gutter:theme(spacing.6)] lg:[--gutter:theme(spacing.10)]">
-        <TableHead>
-          <TableRow>
-            <TableHeader>Rank</TableHeader>
-            <TableHeader>Joined Date</TableHeader>
-            <TableHeader>Name</TableHeader>
-            {/* <TableHeader>Saved</TableHeader> */}
-            <TableHeader className="text-right">Amount Saved</TableHeader>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {orders.map((order) => (
-            <TableRow key={order.id} href={order.url} title={`Order #${order.id}`}>
-              <TableCell>{order.id}</TableCell>
-              <TableCell className="text-zinc-500">{order.date}</TableCell>
-              <TableCell>{order.customer.name}</TableCell>
 
-              {/* <div className="flex items-center gap-2">
-                  <Avatar src={order.event.thumbUrl} className="size-6" />
-                  <span>{order.event.name}</span>
-                </div> */}
-
-              <TableCell className="text-right">US{order.amount.usd}</TableCell>
+      {isLoadingTrendingCircles ? (
+        <div className="text-center py-4">Loading trending circles...</div>
+      ) : (
+        <Table className="mt-4 [--gutter:theme(spacing.6)] lg:[--gutter:theme(spacing.10)]">
+          <TableHead>
+            <TableRow>
+              <TableHeader>Rank</TableHeader>
+              <TableHeader>Joined Date</TableHeader>
+              <TableHeader>Name</TableHeader>
+              {/* <TableHeader>Saved</TableHeader> */}
+              <TableHeader className="text-right">Amount Saved</TableHeader>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {orders.map((order) => (
+              <TableRow key={order.id} href={order.url} title={`Order #${order.id}`}>
+                <TableCell>{order.id}</TableCell>
+                <TableCell className="text-zinc-500">{order.date}</TableCell>
+                <TableCell>{order.customer.name}</TableCell>
+
+                {/* <div className="flex items-center gap-2">
+                    <Avatar src={order.event.thumbUrl} className="size-6" />
+                    <span>{order.event.name}</span>
+                  </div> */}
+
+                <TableCell className="text-right">US{order.amount.usd}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
 
     </>
   )

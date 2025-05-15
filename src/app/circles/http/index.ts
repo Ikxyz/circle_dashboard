@@ -1,6 +1,6 @@
 'use client'
 
-import { useCircle, useCircles, useCreateCircle, useJoinCircle, useLeaderboard } from '@/hooks'
+import { useCircle, useCircles, useLeaderboard, useMutations } from '@/hooks'
 import { QueryClient } from '@tanstack/react-query'
 
 // Get circles with pagination
@@ -31,10 +31,13 @@ export const useCircleDetails = (id?: string) => {
   }
 }
 
-// Mutations that need the QueryClient
-export const getCirclesMutations = (queryClient: QueryClient) => {
+// React hook to get circle mutations
+export const useCircleMutations = () => {
+  const queryClient = new QueryClient()
+  const mutations = useMutations(queryClient)
+
   return {
-    createCircle: useCreateCircle(queryClient),
-    joinCircle: useJoinCircle(queryClient),
+    createCircle: mutations.createCircle,
+    joinCircle: mutations.joinCircle,
   }
 }
