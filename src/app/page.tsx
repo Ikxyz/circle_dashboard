@@ -10,19 +10,30 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from 's
 import ConnectWallet from '@/components/connectWallet'
 import { Stat } from '@/components/stats'
 import { useHomePage } from './http'
+import { useState } from 'react'
+import { useActiveAccount } from 'thirdweb/react'
 
 export default function HomePage() {
-  // For simplicity, using a hardcoded address here
-  // In a real app, you'd get this from your wallet provider
-  const address = "example-wallet-address";
-  const { trendingCircles, isLoadingTrendingCircles } = useHomePage(address);
+  const [timeframe, setTimeframe] = useState('week')
+  const activeAccount = useActiveAccount()
+  const walletAddress = activeAccount?.address?.toString() || ''
 
-  // Mock data until we have real data from React Query
-  const orders = [
-    { id: 1, date: '2023-04-01', customer: { name: 'John Doe' }, amount: { usd: '0.1 ETH' }, url: '#' },
-    { id: 2, date: '2023-04-02', customer: { name: 'Jane Smith' }, amount: { usd: '0.15 ETH' }, url: '#' },
-    { id: 3, date: '2023-04-03', customer: { name: 'Bob Johnson' }, amount: { usd: '0.2 ETH' }, url: '#' },
-  ];
+  const {
+    trendingCircles,
+    isLoadingTrendingCircles,
+    kpiData,
+    isLoadingKpiData
+  } = useHomePage(walletAddress, timeframe)
+
+  // Handle timeframe change
+  const handleTimeframeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setTimeframe(e.target.value)
+  }
+
+  // Format numbers with commas
+  const formatNumber = (num: number) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  }
 
   return (
     <>
@@ -36,28 +47,56 @@ export default function HomePage() {
         <Subheading>Circles overview</Subheading>
 
         <div>
-
-          <Select name="period">
-            <option value="last_week">Last week</option>
-            <option value="last_two">Last two weeks</option>
-            <option value="last_month">Last month</option>
-            <option value="last_quarter">Last quarter</option>
+          <Select
+            name="period"
+            value={timeframe}
+            onChange={handleTimeframeChange}
+          >
+            <option value="week">Last week</option>
+            <option value="two_weeks">Last two weeks</option>
+            <option value="month">Last month</option>
+            <option value="quarter">Last quarter</option>
           </Select>
         </div>
       </div>
 
-
-
       <div className="mt-4 grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
-        <Stat title="Circles Balance" value="117.566 ETH" change="+4.5%" />
-        <Stat title="Total Circles Created" value="55" change="+0.5%" />
-        <Stat title="Total Cirle Members" value="239" change="+4.5%" />
-        <Stat title="Your Total Saved" value="0.589 ETH" change="+21.2%" />
+        {isLoadingKpiData ? (
+          <>
+            <Stat title="Circles Balance" value="Loading..." change="" />
+            <Stat title="Total Circles Created" value="Loading..." change="" />
+            <Stat title="Total Circle Members" value="Loading..." change="" />
+            <Stat title="Your Total Saved" value="Loading..." change="" />
+          </>
+        ) : (
+          <>
+            <Stat
+              title="Circles Balance"
+              value={`${kpiData?.kpi.circlesBalance.value.toFixed(4)} ETH`}
+              change={kpiData?.kpi.circlesBalance.change || ""}
+            />
+            <Stat
+              title="Total Circles Created"
+              value={formatNumber(kpiData?.kpi.totalCircles.value || 0)}
+              change={kpiData?.kpi.totalCircles.change || ""}
+            />
+            <Stat
+              title="Total Circle Members"
+              value={formatNumber(kpiData?.kpi.totalMembers.value || 0)}
+              change={kpiData?.kpi.totalMembers.change || ""}
+            />
+            <Stat
+              title="Your Total Saved"
+              value={`${kpiData?.kpi.userTotalSaved.value.toFixed(4)} ETH`}
+              change={kpiData?.kpi.userTotalSaved.change || ""}
+            />
+          </>
+        )}
       </div>
       <Subheading className="mt-14">Highest Savers</Subheading>
 
-      {isLoadingTrendingCircles ? (
-        <div className="text-center py-4">Loading trending circles...</div>
+      {isLoadingKpiData ? (
+        <div className="text-center py-4">Loading leaderboard...</div>
       ) : (
         <Table className="mt-4 [--gutter:theme(spacing.6)] lg:[--gutter:theme(spacing.10)]">
           <TableHead>
@@ -65,29 +104,28 @@ export default function HomePage() {
               <TableHeader>Rank</TableHeader>
               <TableHeader>Joined Date</TableHeader>
               <TableHeader>Name</TableHeader>
-              {/* <TableHeader>Saved</TableHeader> */}
               <TableHeader className="text-right">Amount Saved</TableHeader>
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order) => (
-              <TableRow key={order.id} href={order.url} title={`Order #${order.id}`}>
-                <TableCell>{order.id}</TableCell>
-                <TableCell className="text-zinc-500">{order.date}</TableCell>
-                <TableCell>{order.customer.name}</TableCell>
-
-                {/* <div className="flex items-center gap-2">
-                    <Avatar src={order.event.thumbUrl} className="size-6" />
-                    <span>{order.event.name}</span>
-                  </div> */}
-
-                <TableCell className="text-right">US{order.amount.usd}</TableCell>
+            {kpiData?.leaderboard.map((saver) => (
+              <TableRow key={saver.userId} href={`/profile/${saver.wallet}`} title={`Profile of ${saver.username}`}>
+                <TableCell>{saver.rank}</TableCell>
+                <TableCell className="text-zinc-500">
+                  {new Date(saver.joinedAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Avatar src={saver.avatar} className="size-6" />
+                    <span>{saver.username}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="text-right">{saver.amountSaved.toFixed(4)} ETH</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       )}
-
     </>
   )
 }
