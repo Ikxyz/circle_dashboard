@@ -6,6 +6,7 @@ import { ApplicationLayout } from './application-layout'
 import { getEvents } from './data'
 import WalletProvider from '@/providers/walletProvider'
 import Providers from './providers'
+import WalletRequiredProvider from '@/providers/WalletRequiredProvider'
 
 // export const metadata: Metadata = {
 //   title: {
@@ -16,6 +17,8 @@ import Providers from './providers'
 // }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Define paths that are exempt from requiring wallet connection
+  const exemptPaths = ['/learn', '/faq', '/about']
 
   return (
     <html
@@ -29,7 +32,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <WalletProvider>
           <Providers>
-            <ApplicationLayout>{children}</ApplicationLayout>
+            <WalletRequiredProvider exempt={exemptPaths}>
+              <ApplicationLayout>{children}</ApplicationLayout>
+            </WalletRequiredProvider>
           </Providers>
         </WalletProvider>
       </body>
