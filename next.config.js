@@ -1,5 +1,7 @@
 // next.config.js
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Enable webpack configuration for WebAssembly
   webpack: (config, { isServer }) => {
     config.experiments = {
       asyncWebAssembly: true, // Enable WebAssembly support
@@ -13,4 +15,16 @@ module.exports = {
 
     return config
   },
+  // Log verbose information during build
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
+  // Explicitly enable App Router (default in Next.js 13+)
+  experimental: {
+    appDir: true,
+  },
 }
+
+module.exports = nextConfig

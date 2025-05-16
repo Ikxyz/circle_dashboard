@@ -1,11 +1,11 @@
 'use client';
 
 import { CONTRACT_ADDRESS, TEST_CHAIN_ID } from '@/app/config';
-import { useWalletBalance, useActiveAccount, useSendTransaction } from 'thirdweb/react';
+import { useWalletBalance, useActiveAccount, useSendTransaction, useActiveWallet } from 'thirdweb/react';
 import { baseSepolia } from 'thirdweb/chains';
 import { prepareTransaction, toWei } from 'thirdweb';
 import { ethers } from 'ethers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../button';
 import Drawer from '../drawer';
 import { Input } from '../input';
@@ -32,6 +32,11 @@ export default function DepositFunds({ circleId }: DepositProps) {
           chain: baseSepolia,
           address: activeAccount?.address,
      });
+     const activeWallet = useActiveWallet();
+
+     useEffect(() => {
+          activeWallet?.connect({ client: thirdWebClient })
+     }, [])
 
      const { mutateAsync: sendTx } = useSendTransaction();
 
@@ -120,7 +125,7 @@ export default function DepositFunds({ circleId }: DepositProps) {
 
      return (
           <div>
-               <Button color='green' className='w-full' onClick={openDeposit}>Deposit to start saving</Button>
+               <Button color='green' className='w-full' onClick={openDeposit}>Deposit</Button>
 
                <Drawer title='Deposit' isOpen={isDepositOpen} onClose={onClose}>
                     <form onSubmit={onSubmit}>

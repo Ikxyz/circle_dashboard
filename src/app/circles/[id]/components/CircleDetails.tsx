@@ -1,6 +1,6 @@
 'use client'
 
-import DepositFunds from '@/components/deposit';
+import DepositFunds from '@/components/deposit/index';
 import { useCircleDetailsPage, useCircleDetailsMutations } from '../http'
 import { useState } from 'react'
 
@@ -112,42 +112,13 @@ export default function CircleDetails({ id, address }: { id: string; address: st
 
                          {user ? (
                               <>
-                                   <button
-                                        onClick={handleJoin}
-                                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md transition-colors mb-4"
-                                        disabled={joinCircle.isPending}
-                                   >
-                                        {joinCircle.isPending ? 'Joining...' : 'Join Circle'}
-                                   </button>
 
-                                   <hr className="my-4 border-gray-200 dark:border-gray-700" />
 
-                                   <h3 className="font-medium mb-2">Deposit</h3>
-                                   <div className="mb-4">
-                                        <label className="block text-sm text-gray-700 dark:text-gray-300 mb-1">
-                                             Amount (USD)
-                                        </label>
-                                        <input
-                                             type="number"
-                                             min="0.01"
-                                             step="0.01"
-                                             value={amount}
-                                             onChange={(e) => setAmount(e.target.value)}
-                                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-zinc-700"
-                                             placeholder="0.00"
-                                        />
-                                   </div>
                                    <DepositFunds
                                         circleId={circle.id}
                                         currency="ETH"
                                    />
-                                   {/* <button
-                                        onClick={handleDeposit}
-                                        disabled={!amount || parseFloat(amount) <= 0 || depositToCircle.isPending}
-                                        className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md transition-colors"
-                                   >
-                                        {depositToCircle.isPending ? 'Depositing...' : 'Deposit Funds'}
-                                   </button> */}
+
                               </>
                          ) : (
                               <p className="text-center py-4">Please connect your wallet to join this circle</p>

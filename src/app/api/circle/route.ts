@@ -72,10 +72,12 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
+    console.log('POST /api/circle received:', body)
 
     // Check if this is a deposit operation
     if (body.circleId && body.wallet && body.amount !== undefined) {
       const { circleId, wallet, amount, txHash } = body
+      console.log('Processing deposit:', { circleId, wallet, amount, txHash })
 
       if (isNaN(amount)) {
         return NextResponse.json({ error: 'Invalid amount value' }, { status: 400 })
