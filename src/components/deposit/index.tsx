@@ -36,7 +36,7 @@ export default function DepositFunds({ circleId }: DepositProps) {
 
      useEffect(() => {
           activeWallet?.connect({ client: thirdWebClient })
-     }, [])
+     }, [activeWallet])
 
      const { mutateAsync: sendTx } = useSendTransaction();
 

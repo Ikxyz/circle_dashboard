@@ -4,6 +4,17 @@ import DepositFunds from '@/components/deposit/index';
 import { useCircleDetailsPage, useCircleDetailsMutations } from '../http'
 import { useState } from 'react'
 
+// Define type for leaderboard member
+type LeaderboardMember = {
+     id: string;
+     totalSaved: number;
+     user: {
+          name: string | null;
+          address: string;
+          avatar: string | null;
+     };
+}
+
 export default function CircleDetails({ id, address }: { id: string; address: string }) {
      const { circle, leaderboard, user, isLoadingCircle } = useCircleDetailsPage(id, address)
      const { joinCircle, depositToCircle } = useCircleDetailsMutations()
@@ -81,7 +92,7 @@ export default function CircleDetails({ id, address }: { id: string; address: st
                               <p className="text-center py-4">No members yet</p>
                          ) : (
                               <div className="space-y-4">
-                                   {leaderboard.map((member, index: number) => (
+                                   {leaderboard.map((member: LeaderboardMember, index: number) => (
                                         <div key={member.id} className="flex items-center space-x-4">
                                              <div className="w-8 h-8 flex items-center justify-center bg-gray-100 dark:bg-zinc-700 rounded-full">
                                                   <span className="font-medium">{index + 1}</span>

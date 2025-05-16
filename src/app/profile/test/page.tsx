@@ -1,3 +1,5 @@
+'use client'
+
 import { thirdWebClient } from "@/providers/walletProvider";
 import { baseSepolia } from "thirdweb/chains";
 import { useActiveAccount, useWalletBalance } from "thirdweb/react";
@@ -12,9 +14,9 @@ export default function App() {
 
      return (
           <div>
-               <p>Wallet address: {account.address}</p>
+               <p>Wallet address: {account?.address || 'Not connected'}</p>
                <p>
-                    Wallet balance: {balance?.displayValue} {balance?.symbol}
+                    Wallet balance: {balance?.displayValue || '0'} {balance?.symbol || 'ETH'}
                </p>
           </div>
      );

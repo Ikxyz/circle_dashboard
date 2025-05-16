@@ -3,8 +3,9 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState } from 'react'
 
+// Use more specific type for children
 type ProvidersProps = {
-     children: React.ReactNode
+     children: JSX.Element | JSX.Element[] | string | number | boolean | null | undefined
 }
 
 export default function Providers({ children }: ProvidersProps) {

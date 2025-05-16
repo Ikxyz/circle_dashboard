@@ -14,8 +14,14 @@ import { getCircle } from '@/lib/circle'
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   let circle = await getCircle(params.id)
 
+  if (!circle) {
+    return {
+      title: 'Circle Not Found',
+    }
+  }
+
   return {
-    title: circle.name && `Circle`,
+    title: `Circle - ${circle.name}`,
   }
 }
 
@@ -25,6 +31,9 @@ export default async function Order({ params }: { params: { id: string } }) {
   if (!cirle) {
     notFound()
   }
+
+  // Ensure that totalSaved has a default value if undefined
+  const totalSaved = cirle.totalSaved || 0;
 
   return (
     <>
@@ -43,7 +52,7 @@ export default async function Order({ params }: { params: { id: string } }) {
           <div className="flex flex-wrap gap-x-10 gap-y-4 py-1.5">
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
               <BanknotesIcon className="size-4 shrink-0 fill-zinc-400 dark:fill-zinc-500" />
-              <span>US{cirle.totalSaved}</span>
+              <span>US{totalSaved}</span>
             </span>
 
             <span className="flex items-center gap-3 text-base/6 text-zinc-950 sm:text-sm/6 dark:text-white">
@@ -52,7 +61,7 @@ export default async function Order({ params }: { params: { id: string } }) {
             </span>
           </div>
           <div className="flex gap-4">
-            <RefundOrder outline amount={cirle.totalSaved.toString()}>
+            <RefundOrder outline amount={totalSaved.toString()}>
               Refund
             </RefundOrder>
             <Button>Resend Invoice</Button>
@@ -73,15 +82,15 @@ export default async function Order({ params }: { params: { id: string } }) {
             </Link>
           </DescriptionDetails>
           <DescriptionTerm>Amount</DescriptionTerm>
-          <DescriptionDetails>US{cirle.totalSaved}</DescriptionDetails>
+          <DescriptionDetails>US{totalSaved}</DescriptionDetails>
           <DescriptionTerm>Amount after exchange rate</DescriptionTerm>
           <DescriptionDetails>
-            US{cirle.totalSaved} &rarr; CA{cirle.totalSaved}
+            US{totalSaved} &rarr; CA{totalSaved}
           </DescriptionDetails>
           <DescriptionTerm>Fee</DescriptionTerm>
-          <DescriptionDetails>CA{cirle.totalSaved}</DescriptionDetails>
+          <DescriptionDetails>CA{totalSaved}</DescriptionDetails>
           <DescriptionTerm>Net</DescriptionTerm>
-          <DescriptionDetails>CA{cirle.totalSaved}</DescriptionDetails>
+          <DescriptionDetails>CA{totalSaved}</DescriptionDetails>
         </DescriptionList>
       </div>
 
