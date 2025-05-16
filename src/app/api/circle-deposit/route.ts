@@ -1,3 +1,4 @@
+import { LOGO_URL } from '@/app/config'
 import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -24,13 +25,42 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid amount value' }, { status: 400 })
     }
 
-    // Get user by wallet address
-    const user = await prisma.user.findUnique({
+    // Get user by wallet address or create if doesn't exist
+    let user = await prisma.user.findUnique({
       where: { address: wallet },
     })
 
+    // Create user if not found
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      console.log(`User with wallet ${wallet} not found, creating new user`)
+      user = await prisma.user.create({
+        data: {
+          address: wallet,
+          name: `User-${wallet.substring(0, 8)}`,
+          avatar: `https://robohash.org/${wallet}.png`,
+        },
+      })
+      console.log(`Created new user:`, user)
+    }
+
+    // Check if circle exists
+    let circle = await prisma.circle.findUnique({
+      where: { id: circleId },
+    })
+
+    // Create circle if not found
+    if (!circle) {
+      console.log(`Circle with ID ${circleId} not found, creating new circle`)
+      circle = await prisma.circle.create({
+        data: {
+          id: circleId,
+          name: circleId.charAt(0).toUpperCase() + circleId.slice(1), // Capitalize first letter
+          description: `Auto-created circle for ${circleId}`,
+          image: LOGO_URL,
+          creatorId: user.id,
+        },
+      })
+      console.log(`Created new circle:`, circle)
     }
 
     // Get circle member or create if doesn't exist
