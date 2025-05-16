@@ -22,7 +22,9 @@ export default function HomePage() {
     trendingCircles,
     isLoadingTrendingCircles,
     kpiData,
-    isLoadingKpiData
+    isLoadingKpiData,
+    userProfile,
+    isLoadingUserProfile
   } = useHomePage(walletAddress, timeframe)
 
   // Handle timeframe change
@@ -35,9 +37,33 @@ export default function HomePage() {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
   }
 
+  // Get appropriate greeting based on time of day
+  const getGreeting = () => {
+    const hour = new Date().getHours()
+    if (hour < 12) return "Good morning"
+    if (hour < 18) return "Good afternoon"
+    return "Good evening"
+  }
+
+  // Get user's name to display in greeting
+  const getUserDisplayName = () => {
+    if (!walletAddress) return "Guest"
+
+    if (userProfile?.name) return userProfile.name
+
+    // If no name but we have a wallet address, show truncated address
+    if (walletAddress) {
+      const start = walletAddress.slice(0, 6)
+      const end = walletAddress.slice(-4)
+      return `${start}...${end}`
+    }
+
+    return "Guest"
+  }
+
   return (
     <>
-      <Heading>Good afternoon, Soke</Heading>
+      <Heading>{getGreeting()}, {getUserDisplayName()}</Heading>
       <div className="mt-8 flex items-end justify-between">
         <div>
           {/* <Button>Connect Wallet</Button> */}
