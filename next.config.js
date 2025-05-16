@@ -21,10 +21,6 @@ const nextConfig = {
       fullUrl: true,
     },
   },
-  // Explicitly enable App Router (default in Next.js 13+)
-  experimental: {
-    appDir: true,
-  },
 }
 
 module.exports = nextConfig
