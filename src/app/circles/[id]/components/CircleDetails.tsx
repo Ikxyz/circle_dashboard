@@ -66,7 +66,7 @@ export default function CircleDetails({ id, address }: { id: string; address: st
                                    </div>
                                    <div>
                                         <span className="text-gray-500 dark:text-gray-400 text-sm">Total Saved</span>
-                                        <p className="font-semibold">${(circle.totalSaved || 0).toFixed(2)}</p>
+                                        <p className="font-semibold">{(circle.totalSaved || 0).toFixed(4)} ETH</p>
                                    </div>
                               </div>
                          </div>
@@ -99,7 +99,7 @@ export default function CircleDetails({ id, address }: { id: string; address: st
                                                   </p>
                                              </div>
                                              <div className="text-right">
-                                                  <p className="font-semibold">${member.totalSaved.toFixed(2)}</p>
+                                                  <p className="font-semibold">{member.totalSaved.toFixed(4)} ETH</p>
                                              </div>
                                         </div>
                                    ))}

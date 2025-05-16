@@ -136,7 +136,7 @@ export default function ProfileDetails({ wallet }: { wallet: string }) {
 
                <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 mb-6">
                     <h3 className="text-xl font-semibold mb-4">My Circles</h3>
-                    <p className="text-lg mb-4">Total Saved: ${totalSavings.toFixed(2)}</p>
+                    <p className="text-lg mb-4">Total Saved: {totalSavings.toFixed(4)} ETH</p>
 
                     {userCircles.length === 0 ? (
                          <div className="text-center py-4">
@@ -162,7 +162,7 @@ export default function ProfileDetails({ wallet }: { wallet: string }) {
                                         <div>
                                              <h4 className="font-medium">{circle.name}</h4>
                                              <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                  ${(circle.totalSaved || 0).toFixed(2)} saved
+                                                  {(circle.totalSaved || 0).toFixed(4)} ETH saved
                                              </p>
                                         </div>
                                    </Link>

@@ -49,7 +49,7 @@ export default function CirclesList() {
                                              Members: {circle.noOfParticipants || 0}
                                         </p>
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                                             Total saved: ${(circle.totalSaved || 0).toFixed(2)}
+                                             Total saved: {(circle.totalSaved || 0).toFixed(4)} ETH
                                         </p>
                                    </div>
                               </div>

@@ -19,9 +19,9 @@ export default function HomePage() {
 
   // Mock data until we have real data from React Query
   const orders = [
-    { id: 1, date: '2023-04-01', customer: { name: 'John Doe' }, amount: { usd: '$100' }, url: '#' },
-    { id: 2, date: '2023-04-02', customer: { name: 'Jane Smith' }, amount: { usd: '$150' }, url: '#' },
-    { id: 3, date: '2023-04-03', customer: { name: 'Bob Johnson' }, amount: { usd: '$200' }, url: '#' },
+    { id: 1, date: '2023-04-01', customer: { name: 'John Doe' }, amount: { usd: '0.1 ETH' }, url: '#' },
+    { id: 2, date: '2023-04-02', customer: { name: 'Jane Smith' }, amount: { usd: '0.15 ETH' }, url: '#' },
+    { id: 3, date: '2023-04-03', customer: { name: 'Bob Johnson' }, amount: { usd: '0.2 ETH' }, url: '#' },
   ];
 
   return (
@@ -49,10 +49,10 @@ export default function HomePage() {
 
 
       <div className="mt-4 grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
-        <Stat title="Circles Balance" value="$117,566" change="+4.5%" />
+        <Stat title="Circles Balance" value="117.566 ETH" change="+4.5%" />
         <Stat title="Total Circles Created" value="55" change="+0.5%" />
         <Stat title="Total Cirle Members" value="239" change="+4.5%" />
-        <Stat title="Your Total Saved" value="$589" change="+21.2%" />
+        <Stat title="Your Total Saved" value="0.589 ETH" change="+21.2%" />
       </div>
       <Subheading className="mt-14">Highest Savers</Subheading>
 
