@@ -1,5 +1,11 @@
 export * from './useAccount'
-export { useFindOrCreateUser, useUserProfile, useUserTotalSavings } from './useAuth'
+export {
+  useFindOrCreateUser,
+  useUserCirclesByWallet,
+  useUserProfile,
+  useUserTotalSavings,
+  useUserTotalSavingsByWallet,
+} from './useAuth'
 export {
   useCircle,
   useCircles,

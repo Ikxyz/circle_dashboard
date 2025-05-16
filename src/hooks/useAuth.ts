@@ -100,3 +100,92 @@ export const useUserTotalSavings = (userId?: string) => {
     enabled: !!userId,
   })
 }
+
+// Hooks that use wallet address directly instead of user ID
+
+export const useUserCirclesByWallet = (wallet?: string) => {
+  return useQuery({
+    queryKey: ['userCirclesByWallet', wallet],
+    queryFn: async () => {
+      if (!wallet) return []
+
+      // First get the user profile to get the ID
+      const userResponse = await fetch('/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ address: wallet }),
+      })
+
+      if (!userResponse.ok) {
+        throw new Error('Failed to fetch user profile')
+      }
+
+      const user = await userResponse.json()
+      if (!user || !user.id) {
+        return []
+      }
+
+      // Then use the user ID to get the circles
+      const circlesResponse = await fetch('/api/auth', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user.id }),
+      })
+
+      if (!circlesResponse.ok) {
+        throw new Error('Failed to fetch user circles')
+      }
+
+      return circlesResponse.json()
+    },
+    enabled: !!wallet,
+  })
+}
+
+export const useUserTotalSavingsByWallet = (wallet?: string) => {
+  return useQuery({
+    queryKey: ['userTotalSavingsByWallet', wallet],
+    queryFn: async () => {
+      if (!wallet) return 0
+
+      // First get the user profile to get the ID
+      const userResponse = await fetch('/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ address: wallet }),
+      })
+
+      if (!userResponse.ok) {
+        throw new Error('Failed to fetch user profile')
+      }
+
+      const user = await userResponse.json()
+      if (!user || !user.id) {
+        return 0
+      }
+
+      // Then use the user ID to get the total savings
+      const savingsResponse = await fetch('/api/auth', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user.id }),
+      })
+
+      if (!savingsResponse.ok) {
+        throw new Error('Failed to fetch user total savings')
+      }
+
+      const data = await savingsResponse.json()
+      return data.totalSavings
+    },
+    enabled: !!wallet,
+  })
+}

@@ -1,11 +1,11 @@
 'use client'
 
 import { useProfilePage, useProfileMutations } from '../http'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 export default function ProfileDetails({ wallet }: { wallet: string }) {
-     const { profile, userCircles, totalSavings, isLoadingProfile } = useProfilePage(wallet, 'user-id-here') // Replace with actual user ID
+     const { profile, userCircles, totalSavings, isLoadingProfile } = useProfilePage(wallet)
      const { updateAccount } = useProfileMutations()
 
      const [isEditing, setIsEditing] = useState(false)
@@ -14,13 +14,13 @@ export default function ProfileDetails({ wallet }: { wallet: string }) {
      const [discord, setDiscord] = useState('')
 
      // Initialize form when profile data is loaded
-     const initForm = () => {
+     useEffect(() => {
           if (profile) {
                setName(profile.name || '')
                setTwitter(profile.twitter || '')
                setDiscord(profile.discord || '')
           }
-     }
+     }, [profile])
 
      // Handle form submission
      const handleSubmit = async (e: React.FormEvent) => {
@@ -74,10 +74,7 @@ export default function ProfileDetails({ wallet }: { wallet: string }) {
                                    </div>
                               </div>
                               <button
-                                   onClick={() => {
-                                        initForm()
-                                        setIsEditing(true)
-                                   }}
+                                   onClick={() => setIsEditing(true)}
                                    className="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md transition-colors"
                               >
                                    Edit Profile

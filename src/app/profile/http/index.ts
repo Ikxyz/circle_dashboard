@@ -1,13 +1,15 @@
 'use client'
 
-import { useAccount, useMutations, useUserCirclesFromApi, useUserTotalSavings } from '@/hooks'
+import { useAccount, useMutations, useUserCirclesByWallet, useUserTotalSavingsByWallet } from '@/hooks'
 import { QueryClient } from '@tanstack/react-query'
 
 // Get user profile and associated data
-export const useProfilePage = (wallet?: string, userId?: string) => {
+export const useProfilePage = (wallet?: string) => {
   const accountQuery = useAccount(wallet)
-  const userCirclesQuery = useUserCirclesFromApi(userId)
-  const totalSavingsQuery = useUserTotalSavings(userId)
+
+  // Use wallet-based hooks to fetch user circles and total savings
+  const userCirclesQuery = useUserCirclesByWallet(wallet)
+  const totalSavingsQuery = useUserTotalSavingsByWallet(wallet)
 
   return {
     profile: accountQuery.data,
