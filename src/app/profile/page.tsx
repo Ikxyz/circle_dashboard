@@ -1,14 +1,25 @@
 'use client'
 
 import ProfileDetails from './components/ProfileDetails'
-import { useAccount } from '@/hooks'
+import { useActiveAccount } from 'thirdweb/react'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function ProfilePage() {
-  // In a real app, you would get the wallet address from your wallet provider
-  // For this example, we'll hardcode a wallet address
-  const wallet = "example-wallet-address";
+  const activeAccount = useActiveAccount()
+  const walletAddress = activeAccount?.address?.toString() || ''
+  const router = useRouter()
 
-  return (
-    <ProfileDetails wallet={wallet} />
-  )
+  // If no wallet is connected, redirect to home page
+  useEffect(() => {
+    if (!walletAddress) {
+      router.push('/')
+    }
+  }, [walletAddress, router])
+
+  if (!walletAddress) {
+    return <div className="p-6 text-center">Please connect your wallet to view your profile</div>
+  }
+
+  return <ProfileDetails wallet={walletAddress} />
 }

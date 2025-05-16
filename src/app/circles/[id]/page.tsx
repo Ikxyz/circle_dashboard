@@ -4,11 +4,17 @@ import { ChevronLeftIcon } from '@heroicons/react/16/solid'
 import { Heading, Subheading } from 'src/components/heading'
 import { Link } from 'src/components/link'
 import CircleDetails from './components/CircleDetails'
+import { useActiveAccount } from 'thirdweb/react'
 
-export default function CircleDetailsPage({ params }: { params: { id: string } }) {
-  // For simplicity, using a hardcoded address here
-  // In a real app, you'd get this from your wallet provider
-  const address = "example-wallet-address";
+type CirclePageProps = {
+  params: {
+    id: string
+  }
+}
+
+export default function CirclePage({ params }: CirclePageProps) {
+  const activeAccount = useActiveAccount()
+  const walletAddress = activeAccount?.address?.toString() || ''
 
   return (
     <>
@@ -20,7 +26,7 @@ export default function CircleDetailsPage({ params }: { params: { id: string } }
       </div>
 
       {/* Use the CircleDetails component which uses React Query */}
-      <CircleDetails id={params.id} address={address} />
+      <CircleDetails id={params.id} address={walletAddress} />
     </>
   )
 }
