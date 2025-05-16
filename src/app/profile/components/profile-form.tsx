@@ -9,8 +9,7 @@ import React, { useEffect, useState } from 'react';
 import CreateAccount from './create-account';
 import { useActiveAccount, useWalletBalance } from 'thirdweb/react';
 import { thirdWebClient } from '@/providers/walletProvider';
-import { Chain } from 'thirdweb';
-import { BaseSepoliaTestnet } from '@thirdweb-dev/chains';
+import { baseSepolia } from 'thirdweb/chains';
 // const connedWallet = useConnectedWallet();
 
 
@@ -21,7 +20,7 @@ export default function ProfileForm() {
      const account = useActiveAccount();
      const { data: balance, isLoading } = useWalletBalance({
           client: thirdWebClient,
-          chain: BaseSepoliaTestnet as any,
+          chain: baseSepolia,
           address: account?.address,
      });
 

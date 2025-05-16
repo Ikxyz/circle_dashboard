@@ -1,5 +1,6 @@
 'use client'
 
+import DepositFunds from '@/components/deposit';
 import { useCircleDetailsPage, useCircleDetailsMutations } from '../http'
 import { useState } from 'react'
 
@@ -30,7 +31,8 @@ export default function CircleDetails({ id, address }: { id: string; address: st
                await depositToCircle.mutateAsync({
                     circleId: circle.id,
                     wallet: user.address,
-                    amount: parseFloat(amount)
+                    amount: parseFloat(amount),
+                    txHash: 'manual_deposit_' + Date.now() // Placeholder for manual deposits
                })
                setAmount('')
                // Show success message
@@ -135,13 +137,17 @@ export default function CircleDetails({ id, address }: { id: string; address: st
                                              placeholder="0.00"
                                         />
                                    </div>
-                                   <button
+                                   <DepositFunds
+                                        circleId={circle.id}
+                                        currency="ETH"
+                                   />
+                                   {/* <button
                                         onClick={handleDeposit}
                                         disabled={!amount || parseFloat(amount) <= 0 || depositToCircle.isPending}
                                         className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md transition-colors"
                                    >
                                         {depositToCircle.isPending ? 'Depositing...' : 'Deposit Funds'}
-                                   </button>
+                                   </button> */}
                               </>
                          ) : (
                               <p className="text-center py-4">Please connect your wallet to join this circle</p>

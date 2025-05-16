@@ -1,22 +1,13 @@
 'use client'
 
-import { Badge } from 'src/components/badge'
+import { MagnifyingGlassIcon } from '@heroicons/react/16/solid'
+import type { Metadata } from 'next'
 import { Button } from 'src/components/button'
-import { Divider } from 'src/components/divider'
-import { Dropdown, DropdownButton, DropdownItem, DropdownMenu } from 'src/components/dropdown'
 import { Heading } from 'src/components/heading'
 import { Input, InputGroup } from 'src/components/input'
 import { Link } from 'src/components/link'
 import { Select } from 'src/components/select'
-import { EllipsisVerticalIcon, MagnifyingGlassIcon } from '@heroicons/react/16/solid'
-import type { Metadata } from 'next'
-import { useCirclesPage } from './http'
-import { useQueryClient } from '@/hooks'
 import CirclesList from './components/CirclesList'
-
-export const metadata: Metadata = {
-  title: 'Events',
-}
 
 export default function CirclesPage() {
   return (

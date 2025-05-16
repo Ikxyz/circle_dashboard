@@ -10,7 +10,6 @@ import { Select } from 'src/components/select';
 import { Text } from 'src/components/text';
 import { Textarea } from 'src/components/textarea';
 import CreateCircleForm from './components/CreateCircleForm';
-import WalletProvider from '@/providers/walletProvider';
 
 // const isLoading = new Signal(false);
 
@@ -19,9 +18,6 @@ export default function CreateCirclePage() {
   const address = "example-wallet-address";
 
   return (
-    <WalletProvider>
-      {/* Use the CreateCircleForm component which uses React Query */}
-      <CreateCircleForm address={address} />
-    </WalletProvider>
+    < CreateCircleForm address={address} />
   );
 }

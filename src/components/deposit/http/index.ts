@@ -7,6 +7,7 @@ type DepositRequest = {
   circleId: string
   wallet: string
   amount: number
+  txHash: string
 }
 
 // Deposit funds to a circle

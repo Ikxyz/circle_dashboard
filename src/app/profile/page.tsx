@@ -1,6 +1,5 @@
 'use client'
 
-import WalletProvider from '@/providers/walletProvider'
 import ProfileDetails from './components/ProfileDetails'
 import { useAccount } from '@/hooks'
 
@@ -10,9 +9,6 @@ export default function ProfilePage() {
   const wallet = "example-wallet-address";
 
   return (
-    <WalletProvider>
-      {/* Use the ProfileDetails component which uses React Query */}
-      <ProfileDetails wallet={wallet} />
-    </WalletProvider>
+    <ProfileDetails wallet={wallet} />
   )
 }

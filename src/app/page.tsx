@@ -8,7 +8,6 @@ import { Heading, Subheading } from 'src/components/heading'
 import { Select } from 'src/components/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from 'src/components/table'
 import ConnectWallet from '@/components/connectWallet'
-import WalletProvider from '@/providers/walletProvider'
 import { Stat } from '@/components/stats'
 import { useHomePage } from './http'
 
@@ -31,9 +30,7 @@ export default function HomePage() {
       <div className="mt-8 flex items-end justify-between">
         <div>
           {/* <Button>Connect Wallet</Button> */}
-          <WalletProvider>
-            <ConnectWallet />
-          </WalletProvider>
+          <ConnectWallet />
         </div>
 
         <Subheading>Circles overview</Subheading>

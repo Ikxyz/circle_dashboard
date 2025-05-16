@@ -256,8 +256,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.7.0
-   * Query Engine version: 3cff47a7f5d65c3ea74883f1d736e41d68ce91ed
+   * Prisma Client JS version: 6.8.1
+   * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
    */
   export type PrismaVersion = {
     client: string
@@ -4745,6 +4745,7 @@ export namespace Prisma {
     userId: string | null
     circleId: string | null
     memberId: string | null
+    txHash: string | null
     depositDate: Date | null
   }
 
@@ -4754,6 +4755,7 @@ export namespace Prisma {
     userId: string | null
     circleId: string | null
     memberId: string | null
+    txHash: string | null
     depositDate: Date | null
   }
 
@@ -4763,6 +4765,7 @@ export namespace Prisma {
     userId: number
     circleId: number
     memberId: number
+    txHash: number
     depositDate: number
     _all: number
   }
@@ -4782,6 +4785,7 @@ export namespace Prisma {
     userId?: true
     circleId?: true
     memberId?: true
+    txHash?: true
     depositDate?: true
   }
 
@@ -4791,6 +4795,7 @@ export namespace Prisma {
     userId?: true
     circleId?: true
     memberId?: true
+    txHash?: true
     depositDate?: true
   }
 
@@ -4800,6 +4805,7 @@ export namespace Prisma {
     userId?: true
     circleId?: true
     memberId?: true
+    txHash?: true
     depositDate?: true
     _all?: true
   }
@@ -4896,6 +4902,7 @@ export namespace Prisma {
     userId: string
     circleId: string
     memberId: string
+    txHash: string
     depositDate: Date
     _count: DepositCountAggregateOutputType | null
     _avg: DepositAvgAggregateOutputType | null
@@ -4924,6 +4931,7 @@ export namespace Prisma {
     userId?: boolean
     circleId?: boolean
     memberId?: boolean
+    txHash?: boolean
     depositDate?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     circle?: boolean | CircleDefaultArgs<ExtArgs>
@@ -4936,6 +4944,7 @@ export namespace Prisma {
     userId?: boolean
     circleId?: boolean
     memberId?: boolean
+    txHash?: boolean
     depositDate?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     circle?: boolean | CircleDefaultArgs<ExtArgs>
@@ -4948,6 +4957,7 @@ export namespace Prisma {
     userId?: boolean
     circleId?: boolean
     memberId?: boolean
+    txHash?: boolean
     depositDate?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     circle?: boolean | CircleDefaultArgs<ExtArgs>
@@ -4960,10 +4970,11 @@ export namespace Prisma {
     userId?: boolean
     circleId?: boolean
     memberId?: boolean
+    txHash?: boolean
     depositDate?: boolean
   }
 
-  export type DepositOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "amount" | "userId" | "circleId" | "memberId" | "depositDate", ExtArgs["result"]["deposit"]>
+  export type DepositOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "amount" | "userId" | "circleId" | "memberId" | "txHash" | "depositDate", ExtArgs["result"]["deposit"]>
   export type DepositInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     circle?: boolean | CircleDefaultArgs<ExtArgs>
@@ -4993,6 +5004,7 @@ export namespace Prisma {
       userId: string
       circleId: string
       memberId: string
+      txHash: string
       depositDate: Date
     }, ExtArgs["result"]["deposit"]>
     composites: {}
@@ -5425,6 +5437,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"Deposit", 'String'>
     readonly circleId: FieldRef<"Deposit", 'String'>
     readonly memberId: FieldRef<"Deposit", 'String'>
+    readonly txHash: FieldRef<"Deposit", 'String'>
     readonly depositDate: FieldRef<"Deposit", 'DateTime'>
   }
     
@@ -5897,6 +5910,7 @@ export namespace Prisma {
     userId: 'userId',
     circleId: 'circleId',
     memberId: 'memberId',
+    txHash: 'txHash',
     depositDate: 'depositDate'
   };
 
@@ -6208,6 +6222,7 @@ export namespace Prisma {
     userId?: StringFilter<"Deposit"> | string
     circleId?: StringFilter<"Deposit"> | string
     memberId?: StringFilter<"Deposit"> | string
+    txHash?: StringFilter<"Deposit"> | string
     depositDate?: DateTimeFilter<"Deposit"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     circle?: XOR<CircleScalarRelationFilter, CircleWhereInput>
@@ -6220,6 +6235,7 @@ export namespace Prisma {
     userId?: SortOrder
     circleId?: SortOrder
     memberId?: SortOrder
+    txHash?: SortOrder
     depositDate?: SortOrder
     user?: UserOrderByWithRelationInput
     circle?: CircleOrderByWithRelationInput
@@ -6235,6 +6251,7 @@ export namespace Prisma {
     userId?: StringFilter<"Deposit"> | string
     circleId?: StringFilter<"Deposit"> | string
     memberId?: StringFilter<"Deposit"> | string
+    txHash?: StringFilter<"Deposit"> | string
     depositDate?: DateTimeFilter<"Deposit"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     circle?: XOR<CircleScalarRelationFilter, CircleWhereInput>
@@ -6247,6 +6264,7 @@ export namespace Prisma {
     userId?: SortOrder
     circleId?: SortOrder
     memberId?: SortOrder
+    txHash?: SortOrder
     depositDate?: SortOrder
     _count?: DepositCountOrderByAggregateInput
     _avg?: DepositAvgOrderByAggregateInput
@@ -6264,6 +6282,7 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Deposit"> | string
     circleId?: StringWithAggregatesFilter<"Deposit"> | string
     memberId?: StringWithAggregatesFilter<"Deposit"> | string
+    txHash?: StringWithAggregatesFilter<"Deposit"> | string
     depositDate?: DateTimeWithAggregatesFilter<"Deposit"> | Date | string
   }
 
@@ -6487,6 +6506,7 @@ export namespace Prisma {
   export type DepositCreateInput = {
     id?: string
     amount: number
+    txHash: string
     depositDate?: Date | string
     user: UserCreateNestedOneWithoutDepositsInput
     circle: CircleCreateNestedOneWithoutDepositsInput
@@ -6499,12 +6519,14 @@ export namespace Prisma {
     userId: string
     circleId: string
     memberId: string
+    txHash: string
     depositDate?: Date | string
   }
 
   export type DepositUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    txHash?: StringFieldUpdateOperationsInput | string
     depositDate?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutDepositsNestedInput
     circle?: CircleUpdateOneRequiredWithoutDepositsNestedInput
@@ -6517,6 +6539,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     circleId?: StringFieldUpdateOperationsInput | string
     memberId?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
     depositDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -6526,12 +6549,14 @@ export namespace Prisma {
     userId: string
     circleId: string
     memberId: string
+    txHash: string
     depositDate?: Date | string
   }
 
   export type DepositUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    txHash?: StringFieldUpdateOperationsInput | string
     depositDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -6541,6 +6566,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     circleId?: StringFieldUpdateOperationsInput | string
     memberId?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
     depositDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -6823,6 +6849,7 @@ export namespace Prisma {
     userId?: SortOrder
     circleId?: SortOrder
     memberId?: SortOrder
+    txHash?: SortOrder
     depositDate?: SortOrder
   }
 
@@ -6836,6 +6863,7 @@ export namespace Prisma {
     userId?: SortOrder
     circleId?: SortOrder
     memberId?: SortOrder
+    txHash?: SortOrder
     depositDate?: SortOrder
   }
 
@@ -6845,6 +6873,7 @@ export namespace Prisma {
     userId?: SortOrder
     circleId?: SortOrder
     memberId?: SortOrder
+    txHash?: SortOrder
     depositDate?: SortOrder
   }
 
@@ -7407,6 +7436,7 @@ export namespace Prisma {
   export type DepositCreateWithoutUserInput = {
     id?: string
     amount: number
+    txHash: string
     depositDate?: Date | string
     circle: CircleCreateNestedOneWithoutDepositsInput
     member: CircleMemberCreateNestedOneWithoutDepositsInput
@@ -7417,6 +7447,7 @@ export namespace Prisma {
     amount: number
     circleId: string
     memberId: string
+    txHash: string
     depositDate?: Date | string
   }
 
@@ -7512,6 +7543,7 @@ export namespace Prisma {
     userId?: StringFilter<"Deposit"> | string
     circleId?: StringFilter<"Deposit"> | string
     memberId?: StringFilter<"Deposit"> | string
+    txHash?: StringFilter<"Deposit"> | string
     depositDate?: DateTimeFilter<"Deposit"> | Date | string
   }
 
@@ -7571,6 +7603,7 @@ export namespace Prisma {
   export type DepositCreateWithoutCircleInput = {
     id?: string
     amount: number
+    txHash: string
     depositDate?: Date | string
     user: UserCreateNestedOneWithoutDepositsInput
     member: CircleMemberCreateNestedOneWithoutDepositsInput
@@ -7581,6 +7614,7 @@ export namespace Prisma {
     amount: number
     userId: string
     memberId: string
+    txHash: string
     depositDate?: Date | string
   }
 
@@ -7718,6 +7752,7 @@ export namespace Prisma {
   export type DepositCreateWithoutMemberInput = {
     id?: string
     amount: number
+    txHash: string
     depositDate?: Date | string
     user: UserCreateNestedOneWithoutDepositsInput
     circle: CircleCreateNestedOneWithoutDepositsInput
@@ -7728,6 +7763,7 @@ export namespace Prisma {
     amount: number
     userId: string
     circleId: string
+    txHash: string
     depositDate?: Date | string
   }
 
@@ -8019,6 +8055,7 @@ export namespace Prisma {
     amount: number
     circleId: string
     memberId: string
+    txHash: string
     depositDate?: Date | string
   }
 
@@ -8082,6 +8119,7 @@ export namespace Prisma {
   export type DepositUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    txHash?: StringFieldUpdateOperationsInput | string
     depositDate?: DateTimeFieldUpdateOperationsInput | Date | string
     circle?: CircleUpdateOneRequiredWithoutDepositsNestedInput
     member?: CircleMemberUpdateOneRequiredWithoutDepositsNestedInput
@@ -8092,6 +8130,7 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     circleId?: StringFieldUpdateOperationsInput | string
     memberId?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
     depositDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -8100,6 +8139,7 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     circleId?: StringFieldUpdateOperationsInput | string
     memberId?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
     depositDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -8115,6 +8155,7 @@ export namespace Prisma {
     amount: number
     userId: string
     memberId: string
+    txHash: string
     depositDate?: Date | string
   }
 
@@ -8144,6 +8185,7 @@ export namespace Prisma {
   export type DepositUpdateWithoutCircleInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    txHash?: StringFieldUpdateOperationsInput | string
     depositDate?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutDepositsNestedInput
     member?: CircleMemberUpdateOneRequiredWithoutDepositsNestedInput
@@ -8154,6 +8196,7 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     userId?: StringFieldUpdateOperationsInput | string
     memberId?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
     depositDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -8162,6 +8205,7 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     userId?: StringFieldUpdateOperationsInput | string
     memberId?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
     depositDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -8170,12 +8214,14 @@ export namespace Prisma {
     amount: number
     userId: string
     circleId: string
+    txHash: string
     depositDate?: Date | string
   }
 
   export type DepositUpdateWithoutMemberInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: FloatFieldUpdateOperationsInput | number
+    txHash?: StringFieldUpdateOperationsInput | string
     depositDate?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutDepositsNestedInput
     circle?: CircleUpdateOneRequiredWithoutDepositsNestedInput
@@ -8186,6 +8232,7 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     userId?: StringFieldUpdateOperationsInput | string
     circleId?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
     depositDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -8194,6 +8241,7 @@ export namespace Prisma {
     amount?: FloatFieldUpdateOperationsInput | number
     userId?: StringFieldUpdateOperationsInput | string
     circleId?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
     depositDate?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

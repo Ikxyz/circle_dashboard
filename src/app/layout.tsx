@@ -27,9 +27,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </head>
       <body>
-        <Providers>
-          <ApplicationLayout>{children}</ApplicationLayout>
-        </Providers>
+        <WalletProvider>
+          <Providers>
+            <ApplicationLayout>{children}</ApplicationLayout>
+          </Providers>
+        </WalletProvider>
       </body>
     </html>
   )

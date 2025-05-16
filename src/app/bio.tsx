@@ -3,15 +3,15 @@
 
 import { Avatar } from '@/components/avatar';
 import { getAccount, Profile } from '@/lib/account';
-import { useAddress } from '@thirdweb-dev/react';
+import { useConnectedWallets } from 'thirdweb/react';
 import React, { useEffect, useState } from 'react'
 import { LOGO_URL } from './config';
 
 export default function Bio() {
-     const address = useAddress();
+     const address = useConnectedWallets();
      const [account, setState] = useState<Profile | null>();
      useEffect(() => {
-          getAccount(address).then(setState)
+          getAccount(address.toString()).then(setState)
 
      }, [address]);
      return (

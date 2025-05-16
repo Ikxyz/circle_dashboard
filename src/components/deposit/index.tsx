@@ -25,7 +25,7 @@ export default function DepositFunds({ circleId }: DepositProps) {
      const activeAccount = useActiveAccount();
 
      // React Query deposit mutation
-     const { mutate: depositToApi, isPending: isApiPending } = useDepositMutation();
+     const { mutateAsync: depositToApi, isPending: isApiPending } = useDepositMutation();
 
      const { data: balance, isLoading: isLoadingBalance } = useWalletBalance({
           client: thirdWebClient,
@@ -55,7 +55,7 @@ export default function DepositFunds({ circleId }: DepositProps) {
                confirmBalance();
 
                const transaction = prepareTransaction({
-                    to: "", // Replace with actual contract address
+                    to: "0xB9Cce561AeA6C55B9B491FEce390234137f272C9", // Replace with actual contract address
                     value: toWei(amount),
                     chain: baseSepolia,
                     client: thirdWebClient,
@@ -64,12 +64,15 @@ export default function DepositFunds({ circleId }: DepositProps) {
                const tx = await sendTx(transaction);
                console.log("Deposit successful:", tx);
 
-               setIsDepositOpen(false);
-               return true;
+               if (!tx.transactionHash) {
+                    throw new Error("No transaction hash returned");
+               }
+
+               return tx.transactionHash;
           } catch (err) {
                console.error("Transaction failed:", err);
                setError("Transaction failed. Please try again.");
-               return false;
+               return null;
           } finally {
                setIsLoading(false);
           }
@@ -101,14 +104,17 @@ export default function DepositFunds({ circleId }: DepositProps) {
                return;
           }
 
-          const success = await onDeposit(amount);
-          if (success) {
+          const txHash = await onDeposit(amount);
+          if (txHash) {
                // Using React Query mutation instead of direct fetch
-               depositToApi({
+               await depositToApi({
                     circleId,
                     wallet: activeAccount.address.toString(),
-                    amount: amountValue
+                    amount: amountValue,
+                    txHash
                });
+
+               setIsDepositOpen(false);
           }
      }
 

@@ -196,8 +196,8 @@ export async function getTreadingCircles(): Promise<Array<Circle>> {
   }))
 }
 
-export async function depositToCircle(arg: { circleId: string; wallet: string; amount: number }) {
-  const { amount: amt, circleId, wallet } = arg
+export async function depositToCircle(arg: { circleId: string; wallet: string; amount: number; txHash: string }) {
+  const { amount: amt, circleId, wallet, txHash } = arg
   const amount = Number(amt)
 
   // Get user by wallet address
@@ -254,6 +254,7 @@ export async function depositToCircle(arg: { circleId: string; wallet: string; a
         userId: user.id,
         circleId,
         memberId: member.id,
+        txHash,
       },
     }),
   ])

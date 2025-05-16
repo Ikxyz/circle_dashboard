@@ -65,6 +65,7 @@ model Deposit {
   userId      String
   circleId    String
   memberId    String
+  txHash      String
   depositDate DateTime @default(now())
 
   // Relationships

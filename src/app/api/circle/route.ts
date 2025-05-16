@@ -75,10 +75,14 @@ export async function POST(req: NextRequest) {
 
     // Check if this is a deposit operation
     if (body.circleId && body.wallet && body.amount !== undefined) {
-      const { circleId, wallet, amount } = body
+      const { circleId, wallet, amount, txHash } = body
 
       if (isNaN(amount)) {
         return NextResponse.json({ error: 'Invalid amount value' }, { status: 400 })
+      }
+
+      if (!txHash) {
+        return NextResponse.json({ error: 'Transaction hash is required' }, { status: 400 })
       }
 
       // Get user by wallet address
@@ -135,6 +139,7 @@ export async function POST(req: NextRequest) {
             userId: user.id,
             circleId,
             memberId: member.id,
+            txHash,
           },
         }),
       ])

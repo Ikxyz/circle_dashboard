@@ -44,9 +44,7 @@ import {
 import { usePathname } from 'next/navigation'
 import { getEvents } from './data'
 import { getAccount } from '@/lib/account'
-import { ThirdwebAuthProvider, useAddress } from '@thirdweb-dev/react'
 import Bio from './bio'
-import WalletProvider from '@/providers/walletProvider'
 import TreadingCircles from '@/components/trendingCircles'
 
 function AccountDropdownMenu({ anchor }: { anchor: 'top start' | 'bottom end' }) {
@@ -181,9 +179,7 @@ export function ApplicationLayout({
           <SidebarFooter className="max-lg:hidden">
             <Dropdown>
               <DropdownButton as={SidebarItem}>
-                <WalletProvider>
-                  <Bio />
-                </WalletProvider>
+                <Bio />
                 <ChevronUpIcon />
               </DropdownButton>
               <AccountDropdownMenu anchor="top start" />

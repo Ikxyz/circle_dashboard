@@ -1,6 +1,5 @@
 'use client'
 
-import WalletProvider from '@/providers/walletProvider'
 import { ChevronLeftIcon } from '@heroicons/react/16/solid'
 import { Heading, Subheading } from 'src/components/heading'
 import { Link } from 'src/components/link'
@@ -20,10 +19,8 @@ export default function CircleDetailsPage({ params }: { params: { id: string } }
         </Link>
       </div>
 
-      <WalletProvider>
-        {/* Use the CircleDetails component which uses React Query */}
-        <CircleDetails id={params.id} address={address} />
-      </WalletProvider>
+      {/* Use the CircleDetails component which uses React Query */}
+      <CircleDetails id={params.id} address={address} />
     </>
   )
 }

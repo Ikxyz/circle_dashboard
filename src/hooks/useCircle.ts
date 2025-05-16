@@ -102,13 +102,23 @@ export const useJoinCircle = (queryClient: QueryClient) => {
 // Hook to deposit to a circle
 export const useDepositToCircle = (queryClient: QueryClient) => {
   return useMutation({
-    mutationFn: async ({ circleId, wallet, amount }: { circleId: string; wallet: string; amount: number }) => {
+    mutationFn: async ({
+      circleId,
+      wallet,
+      amount,
+      txHash,
+    }: {
+      circleId: string
+      wallet: string
+      amount: number
+      txHash: string
+    }) => {
       const response = await fetch('/api/circle', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ circleId, wallet, amount }),
+        body: JSON.stringify({ circleId, wallet, amount, txHash }),
       })
 
       if (!response.ok) {
