@@ -256,7 +256,7 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.8.1
+   * Prisma Client JS version: 6.8.2
    * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
    */
   export type PrismaVersion = {
@@ -1497,7 +1497,7 @@ export namespace Prisma {
   type UserGetPayload<S extends boolean | null | undefined | UserDefaultArgs> = $Result.GetResult<Prisma.$UserPayload, S>
 
   type UserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<UserFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    Omit<UserFindManyArgs, 'select' | 'include' | 'distinct' | 'omit' | 'relationLoadStrategy'> & {
       select?: UserCountAggregateInputType | true
     }
 
@@ -1946,6 +1946,7 @@ export namespace Prisma {
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -1968,6 +1969,7 @@ export namespace Prisma {
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -2020,6 +2022,7 @@ export namespace Prisma {
      * Filter by unique combinations of Users.
      */
     distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -2072,6 +2075,7 @@ export namespace Prisma {
      * Filter by unique combinations of Users.
      */
     distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -2119,6 +2123,7 @@ export namespace Prisma {
      */
     skip?: number
     distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -2141,6 +2146,7 @@ export namespace Prisma {
      * The data needed to create a User.
      */
     data: XOR<UserCreateInput, UserUncheckedCreateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -2197,6 +2203,7 @@ export namespace Prisma {
      * Choose, which User to update.
      */
     where: UserWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -2271,6 +2278,7 @@ export namespace Prisma {
      * In case the User was found with the provided `where` argument, update it with this data.
      */
     update: XOR<UserUpdateInput, UserUncheckedUpdateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -2293,6 +2301,7 @@ export namespace Prisma {
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -2700,7 +2709,7 @@ export namespace Prisma {
   type CircleGetPayload<S extends boolean | null | undefined | CircleDefaultArgs> = $Result.GetResult<Prisma.$CirclePayload, S>
 
   type CircleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<CircleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    Omit<CircleFindManyArgs, 'select' | 'include' | 'distinct' | 'omit' | 'relationLoadStrategy'> & {
       select?: CircleCountAggregateInputType | true
     }
 
@@ -3151,6 +3160,7 @@ export namespace Prisma {
      * Filter, which Circle to fetch.
      */
     where: CircleWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -3173,6 +3183,7 @@ export namespace Prisma {
      * Filter, which Circle to fetch.
      */
     where: CircleWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -3225,6 +3236,7 @@ export namespace Prisma {
      * Filter by unique combinations of Circles.
      */
     distinct?: CircleScalarFieldEnum | CircleScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -3277,6 +3289,7 @@ export namespace Prisma {
      * Filter by unique combinations of Circles.
      */
     distinct?: CircleScalarFieldEnum | CircleScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -3324,6 +3337,7 @@ export namespace Prisma {
      */
     skip?: number
     distinct?: CircleScalarFieldEnum | CircleScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -3346,6 +3360,7 @@ export namespace Prisma {
      * The data needed to create a Circle.
      */
     data: XOR<CircleCreateInput, CircleUncheckedCreateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -3406,6 +3421,7 @@ export namespace Prisma {
      * Choose, which Circle to update.
      */
     where: CircleWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -3484,6 +3500,7 @@ export namespace Prisma {
      * In case the Circle was found with the provided `where` argument, update it with this data.
      */
     update: XOR<CircleUpdateInput, CircleUncheckedUpdateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -3506,6 +3523,7 @@ export namespace Prisma {
      * Filter which Circle to delete.
      */
     where: CircleWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -3857,7 +3875,7 @@ export namespace Prisma {
   type CircleMemberGetPayload<S extends boolean | null | undefined | CircleMemberDefaultArgs> = $Result.GetResult<Prisma.$CircleMemberPayload, S>
 
   type CircleMemberCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<CircleMemberFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    Omit<CircleMemberFindManyArgs, 'select' | 'include' | 'distinct' | 'omit' | 'relationLoadStrategy'> & {
       select?: CircleMemberCountAggregateInputType | true
     }
 
@@ -4305,6 +4323,7 @@ export namespace Prisma {
      * Filter, which CircleMember to fetch.
      */
     where: CircleMemberWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -4327,6 +4346,7 @@ export namespace Prisma {
      * Filter, which CircleMember to fetch.
      */
     where: CircleMemberWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -4379,6 +4399,7 @@ export namespace Prisma {
      * Filter by unique combinations of CircleMembers.
      */
     distinct?: CircleMemberScalarFieldEnum | CircleMemberScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -4431,6 +4452,7 @@ export namespace Prisma {
      * Filter by unique combinations of CircleMembers.
      */
     distinct?: CircleMemberScalarFieldEnum | CircleMemberScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -4478,6 +4500,7 @@ export namespace Prisma {
      */
     skip?: number
     distinct?: CircleMemberScalarFieldEnum | CircleMemberScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -4500,6 +4523,7 @@ export namespace Prisma {
      * The data needed to create a CircleMember.
      */
     data: XOR<CircleMemberCreateInput, CircleMemberUncheckedCreateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -4560,6 +4584,7 @@ export namespace Prisma {
      * Choose, which CircleMember to update.
      */
     where: CircleMemberWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -4638,6 +4663,7 @@ export namespace Prisma {
      * In case the CircleMember was found with the provided `where` argument, update it with this data.
      */
     update: XOR<CircleMemberUpdateInput, CircleMemberUncheckedUpdateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -4660,6 +4686,7 @@ export namespace Prisma {
      * Filter which CircleMember to delete.
      */
     where: CircleMemberWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -5013,7 +5040,7 @@ export namespace Prisma {
   type DepositGetPayload<S extends boolean | null | undefined | DepositDefaultArgs> = $Result.GetResult<Prisma.$DepositPayload, S>
 
   type DepositCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<DepositFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    Omit<DepositFindManyArgs, 'select' | 'include' | 'distinct' | 'omit' | 'relationLoadStrategy'> & {
       select?: DepositCountAggregateInputType | true
     }
 
@@ -5463,6 +5490,7 @@ export namespace Prisma {
      * Filter, which Deposit to fetch.
      */
     where: DepositWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -5485,6 +5513,7 @@ export namespace Prisma {
      * Filter, which Deposit to fetch.
      */
     where: DepositWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -5537,6 +5566,7 @@ export namespace Prisma {
      * Filter by unique combinations of Deposits.
      */
     distinct?: DepositScalarFieldEnum | DepositScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -5589,6 +5619,7 @@ export namespace Prisma {
      * Filter by unique combinations of Deposits.
      */
     distinct?: DepositScalarFieldEnum | DepositScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -5636,6 +5667,7 @@ export namespace Prisma {
      */
     skip?: number
     distinct?: DepositScalarFieldEnum | DepositScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -5658,6 +5690,7 @@ export namespace Prisma {
      * The data needed to create a Deposit.
      */
     data: XOR<DepositCreateInput, DepositUncheckedCreateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -5718,6 +5751,7 @@ export namespace Prisma {
      * Choose, which Deposit to update.
      */
     where: DepositWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -5796,6 +5830,7 @@ export namespace Prisma {
      * In case the Deposit was found with the provided `where` argument, update it with this data.
      */
     update: XOR<DepositUpdateInput, DepositUncheckedUpdateInput>
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -5818,6 +5853,7 @@ export namespace Prisma {
      * Filter which Deposit to delete.
      */
     where: DepositWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
   }
 
   /**
@@ -5877,6 +5913,14 @@ export namespace Prisma {
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const RelationLoadStrategy: {
+    query: 'query',
+    join: 'join'
+  };
+
+  export type RelationLoadStrategy = (typeof RelationLoadStrategy)[keyof typeof RelationLoadStrategy]
 
 
   export const CircleScalarFieldEnum: {

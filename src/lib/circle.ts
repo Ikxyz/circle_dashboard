@@ -1,5 +1,5 @@
 import { LOGO_URL } from '@/app/config'
-import { prisma } from './prisma'
+import prisma from './prisma'
 import Utils from './util'
 
 export type CircleCategory = 'Country' | 'City' | 'State' | 'Region' | 'Continent' | 'Custom' | 'User'

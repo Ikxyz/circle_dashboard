@@ -1,6 +1,6 @@
 import { LOGO_URL } from '@/app/config'
-import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
+import prisma from '../../../lib/prisma'
 
 // Simple POST endpoint for deposits only
 export async function POST(req: NextRequest) {

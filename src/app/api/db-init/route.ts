@@ -1,6 +1,7 @@
 import { seedDatabase } from '@/lib/db-seed'
-import { prisma } from '@/lib/prisma'
+
 import { NextResponse } from 'next/server'
+import prisma from '../../../lib/prisma';
 
 // This route is used to initialize the database with sample data
 // Only for development purposes - should be secured or removed in production

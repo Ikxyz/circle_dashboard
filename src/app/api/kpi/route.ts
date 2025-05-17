@@ -1,5 +1,5 @@
-import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
+import prisma from '../../../lib/prisma'
 
 // GET endpoint to fetch KPIs for dashboard
 export async function GET(req: NextRequest) {

@@ -1,7 +1,7 @@
 import { LOGO_URL } from '@/app/config'
-import { prisma } from '@/lib/prisma'
 import Utils from '@/lib/util'
 import { NextRequest, NextResponse } from 'next/server'
+import prisma from '../../../lib/prisma'
 
 // GET endpoint to get all circles or a specific circle
 export async function GET(req: NextRequest) {

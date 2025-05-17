@@ -35,11 +35,11 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.8.1
+ * Prisma Client JS version: 6.8.2
  * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
  */
 Prisma.prismaVersion = {
-  client: "6.8.1",
+  client: "6.8.2",
   engine: "2060c79ba17c6bb9f5823312b6f6b7f4a845738e"
 }
 
@@ -100,6 +100,11 @@ exports.Prisma.UserScalarFieldEnum = {
   avatar: 'avatar',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RelationLoadStrategy = {
+  query: 'query',
+  join: 'join'
 };
 
 exports.Prisma.CircleScalarFieldEnum = {
@@ -177,7 +182,9 @@ const config = {
         "native": true
       }
     ],
-    "previewFeatures": [],
+    "previewFeatures": [
+      "relationJoins"
+    ],
     "sourceFilePath": "/Users/ik/Documents/projects/circles/prisma/schema.prisma",
     "isCustomOutput": true
   },
@@ -186,7 +193,7 @@ const config = {
     "schemaEnvPath": "../../.env"
   },
   "relativePath": "../../prisma",
-  "clientVersion": "6.8.1",
+  "clientVersion": "6.8.2",
   "engineVersion": "2060c79ba17c6bb9f5823312b6f6b7f4a845738e",
   "datasourceNames": [
     "db"
@@ -201,8 +208,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  address   String   @unique\n  name      String?\n  avatar    String?\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relationships\n  memberships    CircleMember[]\n  createdCircles Circle[]       @relation(\"CircleCreator\")\n  deposits       Deposit[]\n}\n\nmodel Circle {\n  id          String   @id @default(uuid())\n  name        String\n  description String?\n  image       String?\n  balance     Float    @default(0)\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n  creatorId   String\n\n  // Relationships\n  creator  User           @relation(\"CircleCreator\", fields: [creatorId], references: [id])\n  members  CircleMember[]\n  deposits Deposit[]\n}\n\nmodel CircleMember {\n  id         String   @id @default(uuid())\n  userId     String\n  circleId   String\n  joinedAt   DateTime @default(now())\n  totalSaved Float    @default(0)\n\n  // Relationships\n  user     User      @relation(fields: [userId], references: [id])\n  circle   Circle    @relation(fields: [circleId], references: [id])\n  deposits Deposit[]\n\n  @@unique([userId, circleId])\n}\n\nmodel Deposit {\n  id          String   @id @default(uuid())\n  amount      Float\n  userId      String\n  circleId    String\n  memberId    String\n  txHash      String\n  depositDate DateTime @default(now())\n\n  // Relationships\n  user   User         @relation(fields: [userId], references: [id])\n  circle Circle       @relation(fields: [circleId], references: [id])\n  member CircleMember @relation(fields: [memberId], references: [id])\n}\n",
-  "inlineSchemaHash": "f1a383dab8528bc8075108918c153b152d58551b2aea79f8439a8b140be4918e",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider        = \"prisma-client-js\"\n  output          = \"../generated/prisma\"\n  previewFeatures = [\"relationJoins\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  address   String   @unique\n  name      String?\n  avatar    String?\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  // Relationships\n  memberships    CircleMember[]\n  createdCircles Circle[]       @relation(\"CircleCreator\")\n  deposits       Deposit[]\n}\n\nmodel Circle {\n  id          String   @id @default(uuid())\n  name        String\n  description String?\n  image       String?\n  balance     Float    @default(0)\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @updatedAt\n  creatorId   String\n\n  // Relationships\n  creator  User           @relation(\"CircleCreator\", fields: [creatorId], references: [id])\n  members  CircleMember[]\n  deposits Deposit[]\n}\n\nmodel CircleMember {\n  id         String   @id @default(uuid())\n  userId     String\n  circleId   String\n  joinedAt   DateTime @default(now())\n  totalSaved Float    @default(0)\n\n  // Relationships\n  user     User      @relation(fields: [userId], references: [id])\n  circle   Circle    @relation(fields: [circleId], references: [id])\n  deposits Deposit[]\n\n  @@unique([userId, circleId])\n}\n\nmodel Deposit {\n  id          String   @id @default(uuid())\n  amount      Float\n  userId      String\n  circleId    String\n  memberId    String\n  txHash      String\n  depositDate DateTime @default(now())\n\n  // Relationships\n  user   User         @relation(fields: [userId], references: [id])\n  circle Circle       @relation(fields: [circleId], references: [id])\n  member CircleMember @relation(fields: [memberId], references: [id])\n}\n",
+  "inlineSchemaHash": "44aef939f644f219f69e818ccb52ba04a2c2e913b394d5c41472ed3d327cd9c6",
   "copyEngine": true
 }
 
