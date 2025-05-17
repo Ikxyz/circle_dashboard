@@ -7,7 +7,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "db:seed": "ts-node -r tsconfig-paths/register src/lib/db-seed.ts",
+    "____db:seed": "ts-node -r tsconfig-paths/register src/lib/db-seed.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio"
