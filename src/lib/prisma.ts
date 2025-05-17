@@ -1,6 +1,7 @@
 import { PrismaClient } from '../../generated/prisma'
 
 const prismaClientSingleton = () => {
+  console.log('Prisma client singleton')
   return new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
   })

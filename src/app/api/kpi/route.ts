@@ -12,6 +12,7 @@ export async function GET(req: NextRequest) {
     const timeframe = searchParams.get('timeframe') || 'week' // Defaults to 'week'
 
     console.log(`Fetching KPIs for wallet: ${walletAddress}, timeframe: ${timeframe}`)
+    console.log(`Databse connection: ${process.env.DATABASE_URL} ${prisma}`)
 
     // Calculate date range based on timeframe
     const today = new Date()
