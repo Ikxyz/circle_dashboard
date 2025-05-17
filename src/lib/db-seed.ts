@@ -1,5 +1,5 @@
 import { LOGO_URL } from '@/app/config'
-import { prisma } from './prisma'
+import { prisma } from './db'
 
 // Sample data for seeding the database
 const sampleUsers = [

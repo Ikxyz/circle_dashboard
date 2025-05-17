@@ -1,6 +1,8 @@
-
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '../../../lib/prisma';
+import prisma from '../../../lib/db'
+
+// Mark this route as dynamic to avoid static generation errors
+export const dynamic = 'force-dynamic'
 
 // Function to get a random avatar
 function getAvatar(): string {

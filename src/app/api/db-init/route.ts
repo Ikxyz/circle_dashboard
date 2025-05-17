@@ -1,7 +1,10 @@
 import { seedDatabase } from '@/lib/db-seed'
 
 import { NextResponse } from 'next/server'
-import prisma from '../../../lib/prisma';
+import prisma from '../../../lib/db'
+
+// Mark this route as dynamic to avoid static generation errors
+export const dynamic = 'force-dynamic'
 
 // This route is used to initialize the database with sample data
 // Only for development purposes - should be secured or removed in production

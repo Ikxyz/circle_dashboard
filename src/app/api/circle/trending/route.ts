@@ -1,6 +1,9 @@
 import { LOGO_URL } from '@/app/config'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/lib/db'
 import { NextResponse } from 'next/server'
+
+// Mark this route as dynamic to avoid static generation errors
+export const dynamic = 'force-dynamic'
 
 // GET endpoint to get trending circles
 export async function GET() {

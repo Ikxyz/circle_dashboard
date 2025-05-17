@@ -1,6 +1,9 @@
 import { LOGO_URL } from '@/app/config'
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '../../../lib/prisma'
+import prisma from '../../../lib/db'
+
+// Mark this route as dynamic to avoid static generation errors
+export const dynamic = 'force-dynamic'
 
 // Simple POST endpoint for deposits only
 export async function POST(req: NextRequest) {

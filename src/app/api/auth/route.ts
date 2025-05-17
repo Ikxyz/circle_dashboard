@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '../../../lib/prisma'
+import prisma from '../../../lib/db'
+
+// Mark this route as dynamic to avoid static generation errors
+export const dynamic = 'force-dynamic'
 
 // GET endpoint to find or create a user (find-or-create)
 export async function GET(req: NextRequest) {

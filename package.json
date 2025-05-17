@@ -11,6 +11,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
+    "prisma:check-imports": "node scripts/check-prisma-imports.js",
+    "prisma:fix-imports": "node scripts/fix-prisma-imports.js",
     "postinstall": "prisma generate"
   },
   "dependencies": {
