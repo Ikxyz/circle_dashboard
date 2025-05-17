@@ -1,20 +1,30 @@
 /**
  * Helper script to set up Prisma URLs for Vercel deployment
- *
- * This script checks if the DATABASE_URL starts with postgresql:// or postgres://
- * If it does, it sets DIRECT_URL to the same value
- *
- * If the DATABASE_URL starts with prisma:// or prisma+postgres://, it means
- * we're using Prisma Accelerate, and we need to keep the configuration as is
+ * Specifically optimized for Neon PostgreSQL
  */
 
 console.log('Setting up Prisma URLs for deployment...')
 
 const dbUrl = process.env.DATABASE_URL || ''
 
-// If DATABASE_URL is a direct PostgreSQL URL
-if (dbUrl.startsWith('postgresql://') || dbUrl.startsWith('postgres://')) {
-  console.log('Using direct PostgreSQL connection.')
+// Check for Neon database URL
+if (dbUrl.includes('neon.tech')) {
+  console.log('Detected Neon database connection')
+
+  // Extract direct connection URL from pooler connection if needed
+  if (dbUrl.includes('-pooler.') && !process.env.DIRECT_URL) {
+    console.log('Converting pooler URL to direct URL for DIRECT_URL environment variable')
+    const directUrl = dbUrl.replace('-pooler.', '.')
+    process.env.DIRECT_URL = directUrl
+    console.log('DIRECT_URL set for direct connections (migrations/introspection)')
+  } else if (!process.env.DIRECT_URL) {
+    console.log('Setting DIRECT_URL to the same as DATABASE_URL')
+    process.env.DIRECT_URL = dbUrl
+  }
+}
+// If standard PostgreSQL URL
+else if (dbUrl.startsWith('postgresql://') || dbUrl.startsWith('postgres://')) {
+  console.log('Using direct PostgreSQL connection')
   console.log('Setting DIRECT_URL to the same value as DATABASE_URL')
   process.env.DIRECT_URL = dbUrl
 }
@@ -27,8 +37,8 @@ else if (dbUrl.startsWith('prisma://') || dbUrl.startsWith('prisma+postgres://')
 }
 // Invalid or empty URL
 else {
-  console.warn('WARNING: DATABASE_URL is not properly set or has an unknown format.')
-  console.warn('Please set DATABASE_URL to a valid PostgreSQL or Prisma Accelerate URL.')
+  console.warn('WARNING: DATABASE_URL is not properly set or has an unknown format')
+  console.warn('Please set DATABASE_URL to a valid PostgreSQL URL')
 }
 
 console.log('Prisma URL setup complete!')
