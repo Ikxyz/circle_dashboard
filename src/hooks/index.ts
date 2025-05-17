@@ -6,6 +6,7 @@ export {
   useUserTotalSavings,
   useUserTotalSavingsByWallet,
 } from './useAuth'
+export { useAutoAccount } from './useAutoAccount'
 export {
   useCircle,
   useCircles,

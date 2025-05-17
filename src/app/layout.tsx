@@ -7,6 +7,7 @@ import { getEvents } from './data'
 import WalletProvider from '@/providers/walletProvider'
 import Providers from './providers'
 import WalletRequiredProvider from '@/providers/WalletRequiredProvider'
+import AutoAccountProvider from '@/providers/AutoAccountProvider'
 
 // export const metadata: Metadata = {
 //   title: {
@@ -32,9 +33,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <WalletProvider>
           <Providers>
-            <WalletRequiredProvider exempt={exemptPaths}>
-              <ApplicationLayout>{children}</ApplicationLayout>
-            </WalletRequiredProvider>
+            <AutoAccountProvider>
+              <WalletRequiredProvider exempt={exemptPaths}>
+                <ApplicationLayout>{children}</ApplicationLayout>
+              </WalletRequiredProvider>
+            </AutoAccountProvider>
           </Providers>
         </WalletProvider>
       </body>
