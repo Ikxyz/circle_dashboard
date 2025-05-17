@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "node scripts/setup-prisma-urls.js && prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "____db:seed": "ts-node -r tsconfig-paths/register src/lib/db-seed.ts",
+    "db:seed": "ts-node -r tsconfig-paths/register src/lib/db-seed.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio"
