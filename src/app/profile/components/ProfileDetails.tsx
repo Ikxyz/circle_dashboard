@@ -3,6 +3,7 @@
 import { useProfilePage, useProfileMutations } from '../http'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { Circle } from '@/hooks/useCircle'
 
 export default function ProfileDetails({ wallet }: { wallet: string }) {
      const { profile, userCircles, totalSavings, isLoadingProfile } = useProfilePage(wallet)
@@ -147,7 +148,7 @@ export default function ProfileDetails({ wallet }: { wallet: string }) {
                          </div>
                     ) : (
                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              {userCircles.map((circle) => (
+                              {userCircles.map((circle: Circle) => (
                                    <Link
                                         key={circle.id}
                                         href={`/circles/${circle.id}`}
