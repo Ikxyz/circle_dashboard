@@ -1,43 +1,62 @@
 'use client'
 
-import { MagnifyingGlassIcon } from '@heroicons/react/16/solid'
-import type { Metadata } from 'next'
-import { Button } from 'src/components/button'
-import { Heading } from 'src/components/heading'
-import { Input, InputGroup } from 'src/components/input'
-import { Link } from 'src/components/link'
-import { Select } from 'src/components/select'
-import CirclesList from './components/CirclesList'
+import { useCircles } from '@/hooks'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 export default function CirclesPage() {
-  return (
-    <>
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div className="max-sm:w-full sm:flex-1">
-          <Heading>Circles</Heading>
-          <div className="mt-4 flex max-w-xl gap-4">
-            <div className="flex-1">
-              <InputGroup>
-                <MagnifyingGlassIcon />
-                <Input name="search" placeholder="Search circles&hellip;" />
-              </InputGroup>
-            </div>
-            <div>
-              <Select name="sort_by">
-                <option value="name">Sort by joined</option>
-                <option value="date">Sort by trending</option>
-                <option value="status">Sort by status</option>
-              </Select>
-            </div>
-          </div>
-        </div>
-        <Link href="/create">
-          <Button>Create Circle</Button>
-        </Link>
-      </div>
+  const { data: circles, isLoading } = useCircles()
 
-      {/* Use the CirclesList component which uses React Query */}
-      <CirclesList />
-    </>
+  if (isLoading) {
+    return (
+      <div className="container mx-auto p-6">
+        <h1 className="text-2xl font-bold mb-6">Circles</h1>
+        <div className="text-center py-12">Loading circles...</div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="container mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-6">Circles</h1>
+
+      {circles?.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="mb-4">No circles found</p>
+          <Link
+            href="/create"
+            className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md transition-colors"
+          >
+            Create a Circle
+          </Link>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {circles?.map((circle) => (
+            <Link
+              key={circle.id}
+              href={`/circles/${circle.id}`}
+              className="block bg-white dark:bg-zinc-800 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+            >
+              <div className="h-40 rounded-t-lg overflow-hidden">
+                <img
+                  src={circle.image}
+                  alt={circle.name}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="p-4">
+                <h2 className="text-xl font-semibold mb-2">{circle.name}</h2>
+                <p className="text-gray-600 dark:text-gray-300 line-clamp-2 mb-3">{circle.description}</p>
+                <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+                  <span>{circle.noOfParticipants || 0} members</span>
+                  <span>{(circle.totalSaved || 0).toFixed(4)} ETH saved</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
