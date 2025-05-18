@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": " prisma generate && next build",
+    "build": "npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "db:seed": "ts-node -r tsconfig-paths/register src/lib/db-seed.ts",
@@ -13,7 +13,7 @@
     "prisma:studio": "prisma studio",
     "prisma:check-imports": "node scripts/check-prisma-imports.js",
     "prisma:fix-imports": "node scripts/fix-prisma-imports.js",
-    "postinstall": "prisma generate"
+    "postinstall": "npx prisma generate"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.6",
