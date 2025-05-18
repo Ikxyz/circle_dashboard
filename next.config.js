@@ -45,9 +45,7 @@ const nextConfig = {
   // Skip API routes during static generation
   skipTrailingSlashRedirect: true,
   // This ensures API routes are treated as dynamic
-  env: {
-    DATABASE_URL: process.env.DATABASE_URL || 'postgresql://dummy:dummy@localhost:5432/dummy?schema=public',
-  },
+  env: {},
 }
 
 module.exports = nextConfig
